@@ -10,8 +10,7 @@ If removing repeats leaves a section empty, write "Nothing new from the monitore
 
 The scheduled task lists the primary sources. In addition, always check:
 
-- **Quantitative UX Research Blog (Chris Chapman) — specific article:** https://quantuxblog.com/synthetic-survey-data-its-not-data
-  (Check for updates or follow-up posts at https://www.quantuxblog.com/)
+- **Quantitative UX Research Blog (Chris Chapman):** https://www.quantuxblog.com/
 
 ## Commit target
 
