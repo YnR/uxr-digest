@@ -139,15 +139,31 @@ class SearchIndex:
         return rows[:limit]
 
 
+def _date_bounds(when: str) -> tuple[str, str]:
+    """The earliest and latest day a possibly-partial date could mean.
+
+    Some entries only say the month ("Sep 2026" parses to "2026-09"). Compared
+    as plain strings that sorts before every day of its own month, so a
+    "published since the 1st" filter would drop the very articles it is looking
+    for. A partial date spans its whole period at both ends instead.
+    """
+    if len(when) == 7:                 # YYYY-MM
+        return f"{when}-01", f"{when}-31"
+    if len(when) == 4:                 # YYYY
+        return f"{when}-01-01", f"{when}-12-31"
+    return when, when
+
+
 def matches_filters(article: dict, focus_area, source, since, until) -> bool:
     if focus_area and (article.get("focus_area") or "").lower() != focus_area.lower():
         return False
     if source and source.lower() not in (article.get("source") or "").lower():
         return False
     when = article.get("published_iso") or article.get("first_seen") or ""
-    if since and when < since:
+    earliest, latest = _date_bounds(when)
+    if since and latest < since:
         return False
-    if until and when > until:
+    if until and earliest > until:
         return False
     return True
 

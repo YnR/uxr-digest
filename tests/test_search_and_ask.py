@@ -66,8 +66,30 @@ class SearchTest(unittest.TestCase):
         self.assertTrue(rows)
         self.assertTrue(all(a["focus_area"] == "UX Research Job Market" for a in rows))
         recent = self.index.browse(since="2026-09-01")
-        self.assertTrue(all((a["published_iso"] or a["first_seen"]) >= "2026-09-01"
+        self.assertTrue(recent)
+        # Month-only dates count when the month contains the cutoff, so compare
+        # at month precision rather than as raw strings.
+        self.assertTrue(all((a["published_iso"] or a["first_seen"])[:7] >= "2026-09"
                             for a in recent))
+
+    def test_month_only_dates_are_not_dropped_by_a_date_filter(self):
+        # "Sep 2026" parses to "2026-09", which sorts before every day of its
+        # own month; comparing it raw hides those articles from a since filter.
+        titles = {a["title"] for a in self.index.browse(since="2026-09-01")}
+        self.assertIn("Persistent lessons in human-centered automation", titles)
+        partial = [a for a in self.articles if len(a["published_iso"] or "") == 7]
+        september = [a for a in partial if a["published_iso"] == "2026-09"]
+        self.assertTrue(september)
+        for article in september:
+            self.assertIn(article["title"], titles)
+
+    def test_a_date_filter_still_excludes_what_it_should(self):
+        rows = self.index.browse(since="2026-09-01")
+        self.assertTrue(rows)
+        for article in rows:
+            when = article["published_iso"] or article["first_seen"]
+            # Either a September-or-later day, or a month that includes one.
+            self.assertGreaterEqual(when[:7], "2026-09")
 
     def test_filters_apply_to_a_query_too(self):
         hits = self.index.search("AI", focus_area="UX Research Job Market")
