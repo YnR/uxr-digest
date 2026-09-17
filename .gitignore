@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# Fetched article text: grounding for questions, never part of the digest.
+.cache/

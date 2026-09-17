@@ -70,8 +70,20 @@ class ParserTest(unittest.TestCase):
         article = self.by_title["Human-Led Research Remains Essential"]
         self.assertEqual(article["first_seen"], "2026-08-05")
         self.assertTrue(article["repeats"], "the Aug 5 digest repeated the catch-up entry")
-        urls = [a["url"].rstrip("/").lower() for a in self.data["articles"]]
-        self.assertEqual(len(urls), len(set(urls)))
+        ids = [a["id"] for a in self.data["articles"]]
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_two_articles_sharing_a_section_url_both_survive(self):
+        # The Aug 5 posts cite the bare nngroup.com/articles/ index for two
+        # different articles; keyed on the URL alone one of them disappears.
+        titles = {a["title"] for a in self.data["articles"]}
+        self.assertIn("Human-Led Research Remains Essential", titles)
+        self.assertIn("Building Trustworthy AI Chatbots", titles)
+
+    def test_repeat_summaries_are_kept_for_grounding(self):
+        article = self.by_title["A Review of Experiments with Synthetic Users"]
+        self.assertGreater(len(article["all_summaries"]), 1)
+        self.assertIn(article["summary"], article["all_summaries"])
 
     def test_source_aliases_are_folded(self):
         self.assertNotIn("NN/G", self.data["sources"])

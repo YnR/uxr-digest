@@ -17,6 +17,10 @@
     <form class="ask" id="ask-form" autocomplete="off">
       <input type="search" id="ask-input" placeholder="Ask a question about the digest…" aria-label="Ask a question about the digest">
       <button type="submit" id="ask-button">Ask</button>
+      <label class="use-source" title="The digest stores summaries only. Tick this to read the articles themselves, which is slower and needs the sites to be reachable.">
+        <input type="checkbox" id="use-source">
+        <span>consult source pages</span>
+      </label>
     </form>
   </div>
 </header>
@@ -51,6 +55,7 @@
     <label class="field">
       <span>Sort</span>
       <select id="sort">
+        <option value="relevance">Best match</option>
         <option value="newest">Newest first</option>
         <option value="oldest">Oldest first</option>
         <option value="source">By source</option>

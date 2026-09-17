@@ -1,10 +1,13 @@
 const state = {
   articles: [],
   digests: [],
+  byId: new Map(),
   focusAreas: new Set(),
   sources: new Set(),
   query: "",
   sort: "newest",
+  ranked: null,          // ids in relevance order while a search is active
+  snippets: new Map(),   // id -> the matching stretch of summary
 };
 
 const el = (id) => document.getElementById(id);
@@ -35,31 +38,51 @@ function displayDate(article) {
   return `digest ${article.first_seen}`;
 }
 
-function matchesQuery(article, query) {
-  if (!query) return true;
-  const haystack = [article.title, article.source, article.focus_area, article.summary, article.note || ""]
-    .join(" ")
-    .toLowerCase();
-  return query.split(/\s+/).filter(Boolean).every((term) => haystack.includes(term));
+const when = (a) => a.published_iso || a.first_seen;
+const sorters = {
+  newest: (a, b) => when(b).localeCompare(when(a)) || a.title.localeCompare(b.title),
+  oldest: (a, b) => when(a).localeCompare(when(b)) || a.title.localeCompare(b.title),
+  source: (a, b) => a.source.localeCompare(b.source) || when(b).localeCompare(when(a)),
+  title: (a, b) => a.title.localeCompare(b.title),
+};
+
+// Ranking happens on the server, where the whole summary text is indexed.
+// Substring matching here would rank nothing and miss "research" for
+// "researchers".
+async function runSearch() {
+  const query = state.query.trim();
+  if (!query) {
+    state.ranked = null;
+    state.snippets.clear();
+    renderArticles();
+    return;
+  }
+  try {
+    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=500`);
+    const data = await response.json();
+    if (state.query.trim() !== query) return;   // a later keystroke already won
+    state.ranked = data.results.map((r) => r.article.id);
+    state.snippets = new Map(data.results.map((r) => [r.article.id, r.snippet]));
+  } catch (error) {
+    state.ranked = [];
+    state.snippets.clear();
+  }
+  renderArticles();
 }
 
 function visibleArticles() {
-  const query = state.query.trim().toLowerCase();
-  let rows = state.articles.filter(
-    (a) =>
-      (state.focusAreas.size === 0 || state.focusAreas.has(a.focus_area)) &&
-      (state.sources.size === 0 || state.sources.has(a.source)) &&
-      matchesQuery(a, query)
-  );
+  const passesFilters = (a) =>
+    (state.focusAreas.size === 0 || state.focusAreas.has(a.focus_area)) &&
+    (state.sources.size === 0 || state.sources.has(a.source));
 
-  const when = (a) => a.published_iso || a.first_seen;
-  const sorters = {
-    newest: (a, b) => when(b).localeCompare(when(a)) || a.title.localeCompare(b.title),
-    oldest: (a, b) => when(a).localeCompare(when(b)) || a.title.localeCompare(b.title),
-    source: (a, b) => a.source.localeCompare(b.source) || when(b).localeCompare(when(a)),
-    title: (a, b) => a.title.localeCompare(b.title),
-  };
-  return rows.sort(sorters[state.sort]);
+  if (state.ranked) {
+    const rows = state.ranked
+      .map((id) => state.byId.get(id))
+      .filter((a) => a && passesFilters(a));
+    return state.sort === "relevance" ? rows : rows.sort(sorters[state.sort]);
+  }
+  const rows = state.articles.filter(passesFilters);
+  return rows.sort(sorters[state.sort === "relevance" ? "newest" : state.sort]);
 }
 
 function articleCard(article) {
@@ -77,11 +100,11 @@ function articleCard(article) {
       <span>· first in digest ${escapeHtml(article.first_seen)}</span>
       ${repeats}
     </p>
-    <div class="summary">${renderParagraphs(article.summary)}</div>
+    <div class="summary">${renderParagraphs(state.snippets.get(article.id) || article.summary)}</div>
     ${article.note ? `<p class="card-note">${renderInline(article.note)}</p>` : ""}
     <div class="card-actions">
       <a href="${escapeHtml(article.url)}" target="_blank" rel="noopener">Read the article →</a>
-      <button type="button" class="link-button" data-ask="${escapeHtml(article.title)}">Ask about this</button>
+      <button type="button" class="link-button" data-ask="${escapeHtml(article.title)}" data-ask-id="${escapeHtml(article.id)}">Ask about this</button>
     </div>`;
   return li;
 }
@@ -121,13 +144,16 @@ function countBy(key) {
   }, {});
 }
 
-async function ask(question) {
+async function ask(question, articleIds) {
   const panel = el("answer");
   panel.hidden = false;
   el("answer-question").textContent = question;
   el("answer-notice").hidden = true;
   el("answer-sources").textContent = "";
-  el("answer-body").innerHTML = '<p class="thinking">Looking through the digest…</p>';
+  const useSource = el("use-source").checked ? "fetch" : "cached";
+  el("answer-body").innerHTML = useSource === "fetch"
+    ? '<p class="thinking">Reading the source articles…</p>'
+    : '<p class="thinking">Looking through the digest…</p>';
   el("ask-button").disabled = true;
   panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
@@ -135,7 +161,7 @@ async function ask(question) {
     const response = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
+      body: JSON.stringify({ question, use_source: useSource, article_ids: articleIds }),
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || response.statusText);
@@ -163,9 +189,15 @@ async function ask(question) {
 }
 
 function wireUp() {
+  let searchTimer;
   el("search").addEventListener("input", (event) => {
     state.query = event.target.value;
-    renderArticles();
+    if (state.query.trim() && state.sort !== "relevance") {
+      state.sort = "relevance";
+      el("sort").value = "relevance";
+    }
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(runSearch, 150);
   });
   el("sort").addEventListener("change", (event) => {
     state.sort = event.target.value;
@@ -173,9 +205,13 @@ function wireUp() {
   });
   el("reset").addEventListener("click", () => {
     state.query = "";
+    state.ranked = null;
+    state.snippets.clear();
     state.focusAreas.clear();
     state.sources.clear();
+    state.sort = "newest";
     el("search").value = "";
+    el("sort").value = "newest";
     renderFilters();
     renderArticles();
   });
@@ -192,7 +228,7 @@ function wireUp() {
     if (!button) return;
     const question = `What does the digest say about "${button.dataset.ask}"?`;
     el("ask-input").value = question;
-    ask(question);
+    ask(question, [button.dataset.askId]);
   });
 }
 
@@ -205,6 +241,7 @@ async function init() {
   const data = await (await fetch("/api/digest")).json();
   state.articles = data.articles;
   state.digests = data.digests;
+  state.byId = new Map(data.articles.map((a) => [a.id, a]));
   state.focusAreas_all = data.focus_areas;
   state.sources_all = data.sources;
 

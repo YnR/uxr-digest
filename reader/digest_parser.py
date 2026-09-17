@@ -87,6 +87,8 @@ class Article:
     first_seen: str          # digest date the article first appeared in
     first_seen_file: str
     repeats: list[str] = field(default_factory=list)   # later digests repeating it
+    # Every digest summary written about this article, first appearance first.
+    all_summaries: list[str] = field(default_factory=list)
     parse_format: str = ""
 
     def as_dict(self) -> dict:
@@ -212,8 +214,30 @@ def _normalise_url(url: str | None) -> str | None:
     return cleaned.rstrip("/").lower()
 
 
+# Last path segments that name a section index rather than one article.
+INDEX_SEGMENTS = {"articles", "article", "blog", "posts", "post", "news", "p"}
+
+
+def _is_section_url(normalised: str) -> bool:
+    """True when the URL points at a section index rather than one article."""
+    parts = [p for p in normalised.split("/") if p]
+    return len(parts) < 2 or parts[-1] in INDEX_SEGMENTS
+
+
 def _make_id(url: str | None, title: str, source: str) -> str:
-    seed = _normalise_url(url) or f"{title.lower()}|{source.lower()}"
+    """Identity is the URL, which survives a later digest retitling an article.
+
+    Some entries cite a bare section URL (nngroup.com/articles/) for more than
+    one article, so those fall back to url+title — keyed on the URL alone they
+    would collapse into a single record and one of the articles would vanish.
+    """
+    normalised = _normalise_url(url)
+    if not normalised:
+        seed = f"{title.lower()}|{source.lower()}"
+    elif _is_section_url(normalised):
+        seed = f"{normalised}|{title.strip().lower()}"
+    else:
+        seed = normalised
     return hashlib.sha1(seed.encode("utf-8")).hexdigest()[:12]
 
 
@@ -401,13 +425,19 @@ def load_digest(posts_dir: str) -> dict:
         digest, articles = parse_post(path)
         digests.append(digest)
         for article in articles:
-            key = _normalise_url(article.url) or f"{article.title.lower()}|{article.source.lower()}"
+            # article.id already encodes the identity rule, including the
+            # section-URL case where two articles are cited under one URL.
+            key = article.id
             existing = by_key.get(key)
             if existing:
                 duplicate_count += 1
                 if digest.date not in existing.repeats:
                     existing.repeats.append(digest.date)
-                if not existing.summary and article.summary:
+                # A later digest often writes a fuller summary of the same
+                # article. Keep them all — they are extra grounding for Q&A.
+                if article.summary and article.summary not in existing.all_summaries:
+                    existing.all_summaries.append(article.summary)
+                if len(article.summary or "") > len(existing.summary or ""):
                     existing.summary = article.summary
                 if not existing.note and article.note:
                     existing.note = article.note
@@ -415,6 +445,8 @@ def load_digest(posts_dir: str) -> dict:
                     existing.published_raw = article.published_raw
                     existing.published_iso = article.published_iso
                 continue
+            if article.summary:
+                article.all_summaries.append(article.summary)
             by_key[key] = article
             ordered.append(article)
 

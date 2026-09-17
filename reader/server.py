@@ -12,13 +12,16 @@ import mimetypes
 import os
 import sys
 import threading
+import urllib.parse
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from ask import answer  # noqa: E402
+from ask import USE_SOURCE_CHOICES, answer  # noqa: E402
 from digest_parser import default_posts_dir, load_digest  # noqa: E402
+from search import SearchIndex  # noqa: E402
+from sources import fetch as fetch_source  # noqa: E402
 
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 MAX_BODY_BYTES = 64 * 1024
@@ -31,6 +34,7 @@ class DigestStore:
         self.posts_dir = posts_dir
         self._lock = threading.Lock()
         self._data: dict | None = None
+        self._index: SearchIndex | None = None
         self._fingerprint: tuple | None = None
 
     def _current_fingerprint(self) -> tuple:
@@ -45,8 +49,13 @@ class DigestStore:
             fingerprint = self._current_fingerprint()
             if self._data is None or fingerprint != self._fingerprint:
                 self._data = load_digest(self.posts_dir)
+                self._index = SearchIndex(self._data["articles"])
                 self._fingerprint = fingerprint
             return self._data
+
+    def index(self) -> SearchIndex:
+        self.get()          # rebuilds both when a post changed on disk
+        return self._index
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -68,16 +77,43 @@ class Handler(BaseHTTPRequestHandler):
         self._send(status, json.dumps(payload).encode("utf-8"), "application/json; charset=utf-8")
 
     def do_GET(self):  # noqa: N802
-        path = self.path.split("?")[0]
+        parts = urllib.parse.urlsplit(self.path)
+        path = parts.path
         if path == "/api/digest":
             self._send_json(self.store.get())
+            return
+        if path == "/api/search":
+            self._handle_search(urllib.parse.parse_qs(parts.query))
             return
         if path in ("/", "/index.html"):
             path = "/index.html"
         self._serve_static(path)
 
+    def _handle_search(self, query: dict):
+        first = lambda key: (query.get(key) or [""])[0].strip() or None
+        try:
+            limit = int((query.get("limit") or ["20"])[0])
+        except ValueError:
+            limit = 20
+        filters = {"focus_area": first("focus_area"), "source": first("source"),
+                   "since": first("since"), "until": first("until"),
+                   "limit": max(1, min(limit, 500))}
+        index = self.store.index()
+        text = first("q")
+        if not text:
+            rows = index.browse(**filters)
+            self._send_json({"query": "", "results": [
+                {"article": a, "score": None, "matched": [],
+                 "snippet": a.get("summary", "")} for a in rows]})
+            return
+        self._send_json({"query": text, "results": [
+            {"article": hit.article, "score": round(hit.score, 3),
+             "matched": hit.matched, "snippet": hit.snippet}
+            for hit in index.search(text, **filters)]})
+
     def do_POST(self):  # noqa: N802
-        if self.path.split("?")[0] != "/api/ask":
+        path = self.path.split("?")[0]
+        if path not in ("/api/ask", "/api/fetch"):
             self._send_json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("Content-Length") or 0)
@@ -90,9 +126,18 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json({"error": "invalid JSON"}, 400)
             return
 
+        if path == "/api/fetch":
+            self._handle_fetch(payload)
+            return
+
         question = (payload.get("question") or "").strip()
         if not question:
             self._send_json({"error": "question is required"}, 400)
+            return
+        use_source = payload.get("use_source") or "cached"
+        if use_source not in USE_SOURCE_CHOICES:
+            self._send_json(
+                {"error": f"use_source must be one of {', '.join(USE_SOURCE_CHOICES)}"}, 400)
             return
 
         data = self.store.get()
@@ -101,7 +146,17 @@ class Handler(BaseHTTPRequestHandler):
         if scope:
             wanted = set(scope)
             articles = [a for a in articles if a["id"] in wanted] or articles
-        self._send_json(answer(question, articles))
+        self._send_json(answer(question, articles, use_source=use_source))
+
+    def _handle_fetch(self, payload: dict):
+        """Fetch and cache one article's source page, on an explicit request."""
+        article_id = (payload.get("article_id") or "").strip()
+        article = self.store.index().by_id.get(article_id)
+        if not article:
+            self._send_json({"error": "no such article"}, 404)
+            return
+        source = fetch_source(article, force=bool(payload.get("force")))
+        self._send_json({"article_id": article_id, **source.as_dict()})
 
     def _serve_static(self, path: str):
         relative = path.lstrip("/")
