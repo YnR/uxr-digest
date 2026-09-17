@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX Research Digest</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%93%B0%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>UX Research Digest</h1>
+      <p class="stats" id="stats">Loading…</p>
+    </div>
+    <form class="ask" id="ask-form" autocomplete="off">
+      <input type="search" id="ask-input" placeholder="Ask a question about the digest…" aria-label="Ask a question about the digest">
+      <button type="submit" id="ask-button">Ask</button>
+    </form>
+  </div>
+</header>
+
+<section class="answer" id="answer" hidden>
+  <div class="answer-head">
+    <h2 id="answer-question"></h2>
+    <button type="button" class="link-button" id="answer-close">Close</button>
+  </div>
+  <p class="notice" id="answer-notice" hidden></p>
+  <div class="answer-body" id="answer-body"></div>
+  <p class="answer-sources" id="answer-sources"></p>
+</section>
+
+<main>
+  <aside class="filters">
+    <label class="field">
+      <span>Filter</span>
+      <input type="search" id="search" placeholder="Title, source, summary…">
+    </label>
+
+    <div class="field">
+      <span>Focus area</span>
+      <div id="focus-areas" class="checks"></div>
+    </div>
+
+    <div class="field">
+      <span>Source</span>
+      <div id="sources" class="checks"></div>
+    </div>
+
+    <label class="field">
+      <span>Sort</span>
+      <select id="sort">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="source">By source</option>
+        <option value="title">By title</option>
+      </select>
+    </label>
+
+    <button type="button" class="link-button" id="reset">Reset filters</button>
+  </aside>
+
+  <section class="results">
+    <p class="result-count" id="result-count"></p>
+    <ol class="articles" id="articles"></ol>
+    <p class="empty" id="empty" hidden>No articles match these filters.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
