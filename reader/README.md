@@ -94,8 +94,39 @@ onto one record. The exception is a bare section URL: a couple of entries cite
 `nngroup.com/articles/` for two different articles, and keyed on the URL alone
 one of those articles disappears, so those fall back to URL plus title.
 
-Source names are folded too, so `NN/G`, `NN/g` and `Nielsen Norman Group` are
-one filter entry.
+Source names come from `sources.json` (see below), so `NN/G`, `NN/g`,
+`Nielsen Norman Group` and the byline form `Tanner Kohler, Nielsen Norman Group`
+are one filter entry.
+
+## Sources
+
+`sources.json` in the repo root is the project's one list of sources: what the
+scheduled digest task checks, and what this app groups and filters by. Nothing
+keeps a second copy. `reader/source_registry.py` reads it; `reader/sources.py`,
+despite the name, is the separate business of fetching one article's own page.
+
+| Field | Meaning |
+| --- | --- |
+| `id` | stable short key, safe to reference from other tools |
+| `name` | what posts should call the source, and what the reader groups by |
+| `url` | the page the digest checks; `null` when the source has no stable one |
+| `monitored` | `true` if the scheduled task should check it every run |
+| `domains` | hosts belonging to the source, used to fold bylined credits |
+| `aliases` | other names posts have used for it |
+
+A cited source is matched to an entry by its article's host first, then by an
+exact name or alias, then by a name quoted inside a longer credit — which is why
+`Patrick Neeman, UX Collective` groups under UX Collective. A source the file
+does not list keeps the name the post gave it and shows up under "cited, not
+monitored", rather than quietly joining a monitored one.
+
+The sidebar lists the monitored sources first, each one linked and counted,
+including any that have produced nothing — that a monitored source has yielded
+no articles is worth seeing. Sources that are only cited appear below, once
+something cites them.
+
+Adding a source is one edit to `sources.json`. Reload the page and the filters
+follow; the next digest run picks it up with no prompt change.
 
 ## Tests
 
@@ -108,3 +139,5 @@ ends up with a URL and a summary, each of the three entry shapes is checked by
 name, and the date and dedup rules have their own cases. `test_search_and_ask.py`
 covers ranking, stemming, required phrases and filters, the source cache and its
 HTML extraction, and the grounding rules — none of it touches the network.
+`test_source_registry.py` covers the registry: the real `sources.json` parses,
+the matching rules hold, and a missing file degrades instead of raising.
