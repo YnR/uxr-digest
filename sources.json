@@ -1,0 +1,143 @@
+{
+  "note": "The canonical list of sources for this project. Every client reads this file rather than keeping its own copy: the scheduled digest task checks each entry with \"monitored\": true, and the reader app in reader/ uses it to group and filter articles by source. Add, remove or rename a source by editing this file. See reader/README.md for the fields.",
+  "updated": "2026-10-21",
+  "sources": [
+    {
+      "id": "nngroup",
+      "name": "Nielsen Norman Group",
+      "url": "https://www.nngroup.com/articles/",
+      "monitored": true,
+      "domains": ["nngroup.com"],
+      "aliases": ["NN/g", "NNG", "Nielsen Norman Group (NN/g)"]
+    },
+    {
+      "id": "baymard",
+      "name": "Baymard Institute",
+      "url": "https://baymard.com/blog",
+      "monitored": true,
+      "domains": ["baymard.com"],
+      "aliases": ["Baymard"]
+    },
+    {
+      "id": "measuringu",
+      "name": "MeasuringU",
+      "url": "https://measuringu.com/blog/",
+      "monitored": true,
+      "domains": ["measuringu.com"],
+      "aliases": ["Measuring U"]
+    },
+    {
+      "id": "ux-collective",
+      "name": "UX Collective",
+      "url": "https://uxdesign.cc/",
+      "monitored": true,
+      "domains": ["uxdesign.cc", "newsletter.uxdesign.cc"],
+      "aliases": ["UX Collective Newsletter"]
+    },
+    {
+      "id": "people-nerds",
+      "name": "People Nerds (dscout)",
+      "url": "https://dscout.com/people-nerds",
+      "monitored": true,
+      "domains": ["dscout.com"],
+      "aliases": ["dscout", "People Nerds", "dscout People Nerds"]
+    },
+    {
+      "id": "user-interviews",
+      "name": "User Interviews",
+      "url": "https://www.userinterviews.com/blog",
+      "monitored": true,
+      "domains": ["userinterviews.com"],
+      "aliases": ["Fresh Views", "Fresh Views (User Interviews)"]
+    },
+    {
+      "id": "ux-design-weekly",
+      "name": "UX Design Weekly",
+      "url": "https://uxdesignweekly.com/",
+      "monitored": true,
+      "domains": ["uxdesignweekly.com"],
+      "aliases": []
+    },
+    {
+      "id": "dense-discovery",
+      "name": "Dense Discovery",
+      "url": "https://www.densediscovery.com/",
+      "monitored": true,
+      "domains": ["densediscovery.com"],
+      "aliases": []
+    },
+    {
+      "id": "sidebar",
+      "name": "Sidebar",
+      "url": "https://sidebar.io/",
+      "monitored": true,
+      "domains": ["sidebar.io"],
+      "aliases": []
+    },
+    {
+      "id": "quant-ux",
+      "name": "Quantitative UX Research Blog",
+      "url": "https://www.quantuxblog.com/",
+      "monitored": true,
+      "domains": ["quantuxblog.com"],
+      "aliases": [
+        "Quant UX Blog",
+        "Quantitative UX Research Blog (Chris Chapman)",
+        "Chris Chapman"
+      ]
+    },
+    {
+      "id": "user-research-strategist",
+      "name": "The User Research Strategist",
+      "url": "https://www.userresearchstrategist.com/",
+      "monitored": false,
+      "domains": ["userresearchstrategist.com"],
+      "aliases": [
+        "User Research Strategist",
+        "The User Research Strategist, Nikki Anderson",
+        "Nikki Anderson, User Research Strategist",
+        "Nikki Anderson"
+      ]
+    },
+    {
+      "id": "user-weekly",
+      "name": "User Weekly (Jan Ahrend)",
+      "url": null,
+      "monitored": false,
+      "domains": [],
+      "aliases": ["User Weekly", "Jan Ahrend / User Weekly", "Jan Ahrend"]
+    },
+    {
+      "id": "ux-planet",
+      "name": "UX Planet",
+      "url": "https://uxplanet.org/",
+      "monitored": false,
+      "domains": ["uxplanet.org"],
+      "aliases": []
+    },
+    {
+      "id": "ux-design-institute",
+      "name": "UX Design Institute",
+      "url": "https://www.uxdesigninstitute.com/",
+      "monitored": false,
+      "domains": ["uxdesigninstitute.com"],
+      "aliases": []
+    },
+    {
+      "id": "perspective-ai",
+      "name": "Perspective AI",
+      "url": "https://getperspective.ai/",
+      "monitored": false,
+      "domains": ["getperspective.ai"],
+      "aliases": []
+    },
+    {
+      "id": "philip-burgess",
+      "name": "Philip Burgess",
+      "url": "https://philipburgess.net/",
+      "monitored": false,
+      "domains": ["philipburgess.net"],
+      "aliases": []
+    }
+  ]
+}

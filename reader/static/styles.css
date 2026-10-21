@@ -182,3 +182,21 @@ mark { background: var(--accent-soft); color: inherit; }
   main { grid-template-columns: 1fr; }
   .filters { position: static; }
 }
+
+/* Source filters, grouped and linked from sources.json. */
+.checks .group-label {
+  margin: 8px 0 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.checks .group-label:first-child { margin-top: 0; }
+.checks .check-row { display: flex; gap: 8px; align-items: baseline; }
+.checks .check-row label { flex: 1; min-width: 0; }
+.checks .check-row .count { margin-left: 0; }
+.checks .check-row.zero span { color: var(--muted); }
+.checks .source-link { color: var(--muted); text-decoration: none; font-size: 12px; }
+.checks .source-link:hover { color: var(--accent); }
+/* Two groups and their headings need a little more room than the focus areas. */
+#sources.checks { max-height: 320px; }
