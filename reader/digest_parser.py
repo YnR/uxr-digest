@@ -67,6 +67,7 @@ class Article:
     source_raw: str
     source_id: str | None
     source_url: str | None
+    author: str | None
     published_raw: str | None
     published_iso: str | None
     focus_area: str
@@ -168,6 +169,26 @@ def resolve_source(name: str | None, url: str | None = None) -> tuple[str, str |
         return entry.name, entry.id, entry.url
     cleaned = (name or "").strip()
     return cleaned or _source_from_url(url), None, None
+
+
+def byline_author(name: str | None, source: str) -> str | None:
+    """The writer in a credit like 'Tanner Kohler, Nielsen Norman Group'.
+
+    Either side of the last comma may be the publication ('The User Research
+    Strategist, Nikki Anderson' occurs too); the other side is the writer. A
+    plain name, or a tail that is not a person such as 'NN/g, Aug 7', yields none.
+    """
+    head, sep, tail = (name or "").strip().rpartition(",")
+    head, tail = head.strip(), tail.strip()
+    if not (sep and head and tail):
+        return None
+    head_is_source = resolve_source(head)[0] == source
+    tail_is_source = resolve_source(tail)[0] == source
+    if tail_is_source and not head_is_source:
+        return head
+    if head_is_source and not tail_is_source and not _looks_like_date(tail):
+        return tail
+    return None
 
 
 def canonical_source(name: str, url: str | None = None) -> str:
@@ -378,6 +399,7 @@ def parse_post(path: str) -> tuple[Digest, list[Article]]:
                         source_raw=head["source"] or _source_from_url(url),
                         source_id=source_id,
                         source_url=source_url,
+                        author=byline_author(head["source"], source_name),
                         published_raw=head["published_raw"],
                         published_iso=_parse_date(head["published_raw"], int(year)),
                         focus_area=focus_area,
