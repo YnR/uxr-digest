@@ -61,13 +61,13 @@ class SourcesFileTest(unittest.TestCase):
                 self.assertNotIn(key, owner, f"{name!r} claimed by {owner.get(key)} and {row['id']}")
                 owner[key] = row["id"]
 
-    def test_the_ten_monitored_sources_are_listed(self):
+    def test_the_monitored_sources_are_listed(self):
         monitored = {row["name"] for row in self.rows if row["monitored"]}
-        self.assertEqual(len(monitored), 10)
+        self.assertEqual(len(monitored), 11)
         for name in ("Nielsen Norman Group", "Baymard Institute", "MeasuringU",
                      "UX Collective", "People Nerds (dscout)", "User Interviews",
                      "UX Design Weekly", "Dense Discovery", "Sidebar",
-                     "Quantitative UX Research Blog"):
+                     "Quantitative UX Research Blog", "Research toolbox"):
             self.assertIn(name, monitored)
 
 
