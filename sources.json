@@ -87,6 +87,17 @@
       ]
     },
     {
+      "id": "research-toolbox",
+      "name": "Research toolbox",
+      "url": "https://saeidehbakhshi.substack.com/",
+      "monitored": true,
+      "domains": ["saeidehbakhshi.substack.com"],
+      "aliases": [
+        "Saeideh Bakhshi",
+        "Saeideh Bakhshi, Research toolbox"
+      ]
+    },
+    {
       "id": "user-research-strategist",
       "name": "The User Research Strategist",
       "url": "https://www.userresearchstrategist.com/",
