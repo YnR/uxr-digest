@@ -31,6 +31,8 @@ class ParserTest(unittest.TestCase):
     def test_every_article_has_a_url_and_summary(self):
         for article in self.data["articles"]:
             self.assertTrue(article["url"], f"no url: {article['title']}")
+            self.assertNotIn("](", article["title"],
+                             f"unparsed markdown link in title: {article['title']}")
             self.assertTrue(article["url"].startswith("http"), article["url"])
             self.assertTrue(article["summary"], f"no summary: {article['title']}")
 
@@ -54,6 +56,18 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(article["source"], "UX Collective")
         self.assertEqual(article["url"], "https://uxdesign.cc/the-loom-that-raised-its-hand-4e8981b3ef88")
         self.assertNotIn("Read →", article["summary"])
+
+    def test_format_d_entry_links_only_the_title(self):
+        # The digest started writing entries this way in September 2026.
+        article = self.by_title[
+            "Synthetic Users vs. Human Respondents: Same Conclusion, Less Variation"]
+        self.assertEqual(article["parse_format"], "D")
+        self.assertEqual(article["source"], "Nielsen Norman Group")
+        self.assertEqual(article["published_iso"], "2026-10-16")
+        self.assertEqual(
+            article["url"],
+            "https://www.nngroup.com/articles/synthetic-users-vs-human-respondents/")
+        self.assertNotIn("](", article["title"])
 
     def test_heading_drift_maps_to_three_focus_areas(self):
         areas = {a["focus_area"] for a in self.data["articles"]}

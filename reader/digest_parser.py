@@ -41,6 +41,8 @@ FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})(?:-(.+))?\.md$")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*\S)\s*$")
 BOLD_LEAD_RE = re.compile(r"^\*\*(.+?)\*\*(.*)$")
 FULL_LINK_RE = re.compile(r"^\[(.+)\]\((\S+?)\)$")
+# Format D: the link wraps only the title, with the source and date after it.
+TITLE_LINK_RE = re.compile(r"^\[(.+?)\]\((\S+?)\)\s*[—–-]\s*(.+)$")
 # **Title** — [Source](url) *(date)*
 SOURCE_LINK_RE = re.compile(
     r"^\s*[—–-]\s*\[([^\]]+)\]\((\S+?)\)\s*(?:\*\(([^)]*)\)\*)?\s*$"
@@ -265,6 +267,18 @@ def _parse_entry_head(bold: str, rest: str) -> dict | None:
             "url": url,
             "published_raw": published,
             "parse_format": "B",
+        }
+
+    titled_link = TITLE_LINK_RE.match(bold.strip())
+    if titled_link:  # format D — the link wraps the title, source and date follow
+        title, url, tail = titled_link.groups()
+        source, published = _split_source_date(tail.strip())
+        return {
+            "title": _strip_quotes(title),
+            "source": source or _source_from_url(url),
+            "url": url,
+            "published_raw": published,
+            "parse_format": "D",
         }
 
     if rest.strip() in ("", ":"):  # format C — url lives in the summary
