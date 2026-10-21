@@ -9,9 +9,9 @@ items are written two ways, because clients differ:
     and the focus area and source are `<category>` elements with a `domain`
     saying which is which, so a reader can group or filter on either.
   * JSON Feed 1.1 (`.json`) for anything that would rather not parse XML. Same
-    items, plus a `_uxr` object with the structured fields (focus area, source,
-    author, publication date, digest date) so nothing has to be scraped back
-    out of tags.
+    items, plus a `_uxr` object with the structured fields (focus area, source
+    and its `sources.json` id and homepage, author, publication date, digest
+    date) so nothing has to be scraped back out of tags.
 
 The stream is organised three ways, each as its own feed:
 
@@ -97,9 +97,10 @@ def _body_html(article: dict) -> str:
     return "".join(paragraphs)
 
 
-def _feed_meta(title: str, description: str, base_url: str, path: str) -> dict:
+def _feed_meta(title: str, description: str, base_url: str, path: str,
+               home: str | None = None) -> dict:
     return {"title": title, "description": description,
-            "url": base_url + path, "home": HOME_URL}
+            "url": base_url + path, "home": home or HOME_URL}
 
 
 def to_rss(articles: list[dict], meta: dict, built: datetime) -> str:
@@ -145,10 +146,14 @@ def to_json_feed(articles: list[dict], meta: dict) -> dict:
             "content_html": _body_html(a),
             "date_published": _digest_datetime(a["first_seen"]).isoformat(),
             "tags": [a["focus_area"], a["source"]],
-            "authors": [{"name": a["author"] or a["source"]}],
+            "authors": [{"name": a["author"]} if a.get("author")
+                        else {k: v for k, v in (("name", a["source"]),
+                                                ("url", a.get("source_url"))) if v}],
             "_uxr": {
                 "focus_area": a["focus_area"],
                 "source": a["source"],
+                "source_id": a.get("source_id"),
+                "source_url": a.get("source_url"),
                 "author": a.get("author"),
                 "published": a.get("published_iso"),
                 "published_raw": a.get("published_raw"),
@@ -181,8 +186,10 @@ def feed_plan(data: dict) -> list[dict]:
                      "title": f"{FEED_TITLE}: {area}",
                      "description": f"Digest entries in the focus area “{area}”.",
                      "filter": {"focus_area": area}})
+    homepages = {a["source"]: a.get("source_url") for a in articles if a.get("source_url")}
     for source in data["sources"]:
         plan.append({"path": f"sources/{slugify(source)}", "kind": "source", "name": source,
+                     "home": homepages.get(source),
                      "title": f"{FEED_TITLE}: {source}",
                      "description": f"Digest entries from {source}.",
                      "filter": {"source": source}})
@@ -204,7 +211,7 @@ def to_opml(plan: list[dict], base_url: str) -> str:
         for feed in (f for f in plan if f["kind"] == kind):
             out.append(f'<outline type="rss" text={quoteattr(feed["title"])} '
                        f'xmlUrl={quoteattr(base_url + feed["path"] + ".xml")} '
-                       f'htmlUrl={quoteattr(HOME_URL)}/>')
+                       f'htmlUrl={quoteattr(feed.get("home") or HOME_URL)}/>')
         out.append("</outline>")
     out += ["</body>", "</opml>", ""]
     return "\n".join(out)
@@ -227,7 +234,8 @@ def build(posts_dir: str, out_dir: str, base_url: str,
     catalogue = []
     for feed in plan:
         rows = stream(data["articles"], **feed["filter"])
-        meta = _feed_meta(feed["title"], feed["description"], base_url, feed["path"])
+        meta = _feed_meta(feed["title"], feed["description"], base_url, feed["path"],
+                          feed.get("home"))
         write(feed["path"] + ".xml", to_rss(rows, meta, built))
         write(feed["path"] + ".json",
               json.dumps(to_json_feed(rows, meta), ensure_ascii=False, indent=1))

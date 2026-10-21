@@ -4,6 +4,7 @@ const state = {
   byId: new Map(),
   focusAreas: new Set(),
   sources: new Set(),
+  sourceGroups: [],      // from sources.json: monitored sources, then the rest
   query: "",
   sort: "newest",
   ranked: null,          // ids in relevance order while a search is active
@@ -94,7 +95,9 @@ function articleCard(article) {
   li.innerHTML = `
     <h3><a href="${escapeHtml(article.url)}" target="_blank" rel="noopener">${escapeHtml(article.title)}</a></h3>
     <p class="meta">
-      <strong>${escapeHtml(article.source)}</strong>
+      <strong>${article.source_url
+        ? `<a href="${escapeHtml(article.source_url)}" target="_blank" rel="noopener">${escapeHtml(article.source)}</a>`
+        : escapeHtml(article.source)}</strong>
       <span>· ${escapeHtml(displayDate(article))}</span>
       <span class="badge">${escapeHtml(article.focus_area)}</span>
       <span>· first in digest ${escapeHtml(article.first_seen)}</span>
@@ -135,6 +138,52 @@ function renderFilterGroup(containerId, values, selected, counts) {
     });
     container.appendChild(label);
   });
+}
+
+// Source filters are grouped and linked from sources.json, so the sidebar shows
+// the sources the digest monitors — including any that have produced nothing —
+// separately from one-off publications a post happened to cite.
+function sourceRow(source) {
+  const row = document.createElement("div");
+  row.className = source.count ? "check-row" : "check-row zero";
+  const link = source.url
+    ? `<a class="source-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener"
+         title="Open ${escapeHtml(source.name)}">↗</a>`
+    : "";
+  row.innerHTML = `<label><input type="checkbox" value="${escapeHtml(source.name)}">
+      <span>${escapeHtml(source.name)}</span></label>${link}
+    <span class="count">${source.count}</span>`;
+  const box = row.querySelector("input");
+  box.checked = state.sources.has(source.name);
+  box.addEventListener("change", () => {
+    box.checked ? state.sources.add(source.name) : state.sources.delete(source.name);
+    renderArticles();
+  });
+  return row;
+}
+
+function renderSourceFilters() {
+  const container = el("sources");
+  container.replaceChildren();
+  const groups = state.sourceGroups.length ? state.sourceGroups : fallbackSourceGroups();
+  groups.forEach((group) => {
+    if (groups.length > 1 && group.label) {
+      const heading = document.createElement("p");
+      heading.className = "group-label";
+      heading.textContent = group.label;
+      container.appendChild(heading);
+    }
+    group.sources.forEach((source) => container.appendChild(sourceRow(source)));
+  });
+}
+
+// A server without sources.json still lists the sources the posts name.
+function fallbackSourceGroups() {
+  const counts = countBy("source");
+  return [{
+    label: "",
+    sources: (state.sources_all || []).map((name) => ({ name, url: null, count: counts[name] || 0 })),
+  }];
 }
 
 function countBy(key) {
@@ -234,7 +283,7 @@ function wireUp() {
 
 function renderFilters() {
   renderFilterGroup("focus-areas", state.focusAreas_all, state.focusAreas, countBy("focus_area"));
-  renderFilterGroup("sources", state.sources_all, state.sources, countBy("source"));
+  renderSourceFilters();
 }
 
 async function init() {
@@ -244,6 +293,7 @@ async function init() {
   state.byId = new Map(data.articles.map((a) => [a.id, a]));
   state.focusAreas_all = data.focus_areas;
   state.sources_all = data.sources;
+  state.sourceGroups = data.source_groups || [];
 
   const s = data.stats;
   el("stats").textContent =

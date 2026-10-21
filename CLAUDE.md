@@ -8,9 +8,16 @@ If removing repeats leaves a section empty, write "Nothing new from the monitore
 
 ## Sources
 
-The scheduled task lists the primary sources. In addition, always check:
+`sources.json` in the repo root is the list. Read it at the start of every run
+and check every entry whose `"monitored"` is `true`, using its `url`. There is
+no second list anywhere: add, remove or rename a source by editing that file, so
+the digest, the reader app in `reader/`, and anything else built on this repo all
+move together.
 
-- **Quantitative UX Research Blog (Chris Chapman):** https://www.quantuxblog.com/
+When crediting a source in a post, use its `name` from `sources.json` — the
+reader groups articles by it. Citing something the file does not list is fine;
+add it to the file in the same commit with `"monitored": false`, so the next run
+knows the name without having to guess at it.
 
 ## Commit target
 

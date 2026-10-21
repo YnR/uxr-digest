@@ -10,6 +10,9 @@ Three shapes appear:
 
 Section headings drifted too: `## Focus Area 2: ...` and `## 2. ...` both occur,
 with slightly different wording for the same area.
+
+Source names come from `sources.json` by way of `source_registry`, so the digest
+task and this parser agree on what each publication is called.
 """
 
 from __future__ import annotations
@@ -19,6 +22,8 @@ import os
 import re
 from dataclasses import dataclass, field, asdict
 from datetime import date
+
+from source_registry import registry
 
 POSTS_DIRNAME = "posts"
 
@@ -49,50 +54,6 @@ SOURCE_LINK_RE = re.compile(
 )
 READ_LINK_RE = re.compile(r"\(\[[^\]]*\]\((\S+?)\)\)\s*$")
 ITALIC_NOTE_RE = re.compile(r"^\*\((.+)\)\*$")
-# The posts name the same publication several ways; fold them for filtering.
-SOURCE_ALIASES = {
-    "nn/g": "Nielsen Norman Group",
-    "nn/g, aug 7": "Nielsen Norman Group",
-    "nng": "Nielsen Norman Group",
-    "nielsen norman group": "Nielsen Norman Group",
-    "dscout": "People Nerds (dscout)",
-    "dscout people nerds": "People Nerds (dscout)",
-    "people nerds (dscout)": "People Nerds (dscout)",
-    "ux collective newsletter": "UX Collective",
-    "ux collective": "UX Collective",
-    "the user research strategist, nikki anderson": "The User Research Strategist",
-    "the user research strategist": "The User Research Strategist",
-    "user research strategist": "The User Research Strategist",
-    "jan ahrend / user weekly": "User Weekly (Jan Ahrend)",
-}
-
-
-def canonical_source(name: str) -> str:
-    cleaned = (name or "").strip()
-    return SOURCE_ALIASES.get(cleaned.lower(), cleaned)
-
-
-def split_byline(name: str) -> tuple[str, str | None]:
-    """Split 'Tanner Kohler, Nielsen Norman Group' into (publication, author).
-
-    Some entries credit the writer ahead of the publication. Left whole, each
-    byline becomes a source of its own and a per-source view of NN/g or UX
-    Collective misses most of their articles. Only splits when the part after
-    the last comma is a publication the digest already names on its own, so a
-    plain 'Philip Burgess' or 'Perspective AI' is left alone.
-    """
-    cleaned = (name or "").strip()
-    head, sep, tail = cleaned.rpartition(",")
-    if sep and head.strip():
-        publication = canonical_source(tail)
-        if publication in KNOWN_PUBLICATIONS:
-            return publication, head.strip()
-    return canonical_source(cleaned), None
-
-
-KNOWN_PUBLICATIONS = set(SOURCE_ALIASES.values()) | {
-    "MeasuringU", "User Interviews", "UX Planet", "Baymard Institute",
-}
 
 TRACKING_PARAMS = ("utm_", "ref_src", "ref_url", "fbclid", "gclid", "source=")
 
@@ -104,6 +65,8 @@ class Article:
     url: str | None
     source: str
     source_raw: str
+    source_id: str | None
+    source_url: str | None
     author: str | None
     published_raw: str | None
     published_iso: str | None
@@ -191,6 +154,45 @@ def _source_from_url(url: str | None) -> str:
         return "Unknown source"
     host = re.sub(r"^https?://", "", url).split("/")[0]
     return host[4:] if host.startswith("www.") else host
+
+
+def resolve_source(name: str | None, url: str | None = None) -> tuple[str, str | None, str | None]:
+    """Fold a cited source onto `sources.json`: (name, registry id, source URL).
+
+    The posts name the same publication several ways and often prefix a byline,
+    so the registry decides what a source is called. A source the file does not
+    list keeps the name the post gave it and carries no id, which is how it ends
+    up under "cited, not monitored" rather than silently joining a monitored one.
+    """
+    entry = registry().resolve(name, url)
+    if entry:
+        return entry.name, entry.id, entry.url
+    cleaned = (name or "").strip()
+    return cleaned or _source_from_url(url), None, None
+
+
+def byline_author(name: str | None, source: str) -> str | None:
+    """The writer in a credit like 'Tanner Kohler, Nielsen Norman Group'.
+
+    Either side of the last comma may be the publication ('The User Research
+    Strategist, Nikki Anderson' occurs too); the other side is the writer. A
+    plain name, or a tail that is not a person such as 'NN/g, Aug 7', yields none.
+    """
+    head, sep, tail = (name or "").strip().rpartition(",")
+    head, tail = head.strip(), tail.strip()
+    if not (sep and head and tail):
+        return None
+    head_is_source = resolve_source(head)[0] == source
+    tail_is_source = resolve_source(tail)[0] == source
+    if tail_is_source and not head_is_source:
+        return head
+    if head_is_source and not tail_is_source and not _looks_like_date(tail):
+        return tail
+    return None
+
+
+def canonical_source(name: str, url: str | None = None) -> str:
+    return resolve_source(name, url)[0]
 
 
 def _split_title_tail(text: str) -> tuple[str, str]:
@@ -387,15 +389,17 @@ def parse_post(path: str) -> tuple[Digest, list[Article]]:
                     index += 1
                 summary, note, body_url = _clean_summary(body)
                 url = head["url"] or body_url
-                source, author = split_byline(head["source"])
+                source_name, source_id, source_url = resolve_source(head["source"], url)
                 articles.append(
                     Article(
                         id=_make_id(url, head["title"], head["source"]),
                         title=head["title"],
                         url=url,
-                        source=source or _source_from_url(url),
+                        source=source_name,
                         source_raw=head["source"] or _source_from_url(url),
-                        author=author,
+                        source_id=source_id,
+                        source_url=source_url,
+                        author=byline_author(head["source"], source_name),
                         published_raw=head["published_raw"],
                         published_iso=_parse_date(head["published_raw"], int(year)),
                         focus_area=focus_area,
@@ -444,6 +448,46 @@ def _sort_key(path: str) -> tuple:
     year, month, day, suffix = m.groups()
     # A catch-up post covers everything before its own date, so it comes first.
     return (f"{year}-{month}-{day}", 0 if suffix else 1)
+
+
+def _source_counts(articles: list[Article]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for article in articles:
+        counts[article.source] = counts.get(article.source, 0) + 1
+    return counts
+
+
+def _unlisted_sources(articles: list[Article]) -> list[str]:
+    """Sources the posts cite that `sources.json` does not list, worth adding."""
+    listed = {entry.name for entry in registry().entries}
+    return sorted((name for name in _source_counts(articles) if name not in listed),
+                  key=str.lower)
+
+
+def source_groups(articles: list[Article]) -> list[dict]:
+    """Sources for the filter sidebar, grouped the way `sources.json` groups them.
+
+    A monitored source stays on the list even with no articles — that it has
+    produced nothing is worth seeing. An unmonitored one only appears once
+    something cites it.
+    """
+    counts = _source_counts(articles)
+    reg = registry()
+
+    def row(entry) -> dict:
+        return {**entry.as_dict(), "count": counts.get(entry.name, 0)}
+
+    cited = [row(entry) for entry in reg.others if counts.get(entry.name)]
+    cited += [{"id": None, "name": name, "url": None, "monitored": False,
+               "count": counts[name]} for name in _unlisted_sources(articles)]
+    cited.sort(key=lambda r: r["name"].lower())
+
+    groups = [{"label": "Monitored sources", "monitored": True,
+               "sources": [row(entry) for entry in reg.monitored]}]
+    if cited:
+        groups.append({"label": "Cited, not monitored", "monitored": False,
+                       "sources": cited})
+    return [group for group in groups if group["sources"]]
 
 
 def load_digest(posts_dir: str) -> dict:
@@ -501,12 +545,15 @@ def load_digest(posts_dir: str) -> dict:
         "articles": [a.as_dict() for a in ordered],
         "digests": [d.as_dict() for d in sorted(digests, key=lambda d: d.date, reverse=True)],
         "sources": sources,
+        "source_groups": source_groups(ordered),
         "focus_areas": areas,
         "stats": {
             "articles": len(ordered),
             "digests": len(digests),
             "duplicates_folded": duplicate_count,
             "missing_url": sum(1 for a in ordered if not a.url),
+            "sources_monitored": len(registry().monitored),
+            "sources_unlisted": len(_unlisted_sources(ordered)),
             "first_digest": digests[0].date if digests else None,
             "last_digest": digests[-1].date if digests else None,
         },

@@ -15,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "reader"))
 
 import server  # noqa: E402
-from digest_parser import load_digest, split_byline  # noqa: E402
+from digest_parser import byline_author, load_digest  # noqa: E402
 from feeds import SOURCE_DOMAIN, TOPIC_DOMAIN, build, stream  # noqa: E402
 
 POSTS = os.path.join(ROOT, "posts")
@@ -95,14 +95,24 @@ class FeedBuildTest(unittest.TestCase):
 
 class BylineTest(unittest.TestCase):
     def test_author_is_split_from_a_known_publication(self):
-        self.assertEqual(split_byline("Tanner Kohler, Nielsen Norman Group"),
-                         ("Nielsen Norman Group", "Tanner Kohler"))
-        self.assertEqual(split_byline("Will Schiavone, Eva Sundberg & Jeff Sauro, MeasuringU"),
-                         ("MeasuringU", "Will Schiavone, Eva Sundberg & Jeff Sauro"))
+        self.assertEqual(byline_author("Tanner Kohler, Nielsen Norman Group",
+                                       "Nielsen Norman Group"), "Tanner Kohler")
+        self.assertEqual(byline_author("Will Schiavone, Eva Sundberg & Jeff Sauro, MeasuringU",
+                                       "MeasuringU"), "Will Schiavone, Eva Sundberg & Jeff Sauro")
 
-    def test_unknown_tail_is_left_whole(self):
-        self.assertEqual(split_byline("Philip Burgess"), ("Philip Burgess", None))
-        self.assertEqual(split_byline("NN/g"), ("Nielsen Norman Group", None))
+    def test_author_may_follow_the_publication(self):
+        self.assertEqual(byline_author("Nielsen Norman Group, Tanner Kohler",
+                                       "Nielsen Norman Group"), "Tanner Kohler")
+
+    def test_no_author_when_both_sides_name_the_source(self):
+        # sources.json lists "Nikki Anderson" as an alias of her newsletter.
+        self.assertIsNone(byline_author("The User Research Strategist, Nikki Anderson",
+                                        "The User Research Strategist"))
+
+    def test_plain_names_have_no_author(self):
+        self.assertIsNone(byline_author("Philip Burgess", "Philip Burgess"))
+        self.assertIsNone(byline_author("NN/g", "Nielsen Norman Group"))
+        self.assertIsNone(byline_author("NN/g, Aug 7", "Nielsen Norman Group"))
 
     def test_bylines_no_longer_fragment_sources(self):
         sources = load_digest(POSTS)["sources"]
