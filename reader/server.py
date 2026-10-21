@@ -14,12 +14,14 @@ import sys
 import threading
 import urllib.parse
 import webbrowser
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from ask import USE_SOURCE_CHOICES, answer  # noqa: E402
 from digest_parser import default_posts_dir, load_digest  # noqa: E402
+from feeds import FEED_DESCRIPTION, FEED_TITLE, stream, to_json_feed, to_rss  # noqa: E402
 from search import SearchIndex  # noqa: E402
 from sources import fetch as fetch_source  # noqa: E402
 
@@ -85,6 +87,9 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/search":
             self._handle_search(urllib.parse.parse_qs(parts.query))
             return
+        if path in ("/feed.xml", "/feed.json"):
+            self._handle_feed(path, urllib.parse.parse_qs(parts.query))
+            return
         if path in ("/", "/index.html"):
             path = "/index.html"
         self._serve_static(path)
@@ -110,6 +115,26 @@ class Handler(BaseHTTPRequestHandler):
             {"article": hit.article, "score": round(hit.score, 3),
              "matched": hit.matched, "snippet": hit.snippet}
             for hit in index.search(text, **filters)]})
+
+    def _handle_feed(self, path: str, query: dict):
+        """The stream as RSS or JSON Feed, filtered like /api/search.
+
+        /feed.xml?topic=AI+in+the+Research+Practice&source=MeasuringU&since=2026-10-01
+        """
+        first = lambda key: (query.get(key) or [""])[0].strip() or None
+        rows = stream(self.store.get()["articles"], focus_area=first("topic"),
+                      source=first("source"), since=first("since"),
+                      until=first("until"), month=first("month"))
+        host = self.headers.get("Host") or "127.0.0.1"
+        meta = {"title": FEED_TITLE, "description": FEED_DESCRIPTION,
+                "url": f"http://{host}/feed", "home": f"http://{host}/"}
+        if path.endswith(".json"):
+            body = json.dumps(to_json_feed(rows, meta), ensure_ascii=False)
+            self._send(200, body.encode("utf-8"), "application/feed+json; charset=utf-8")
+        else:
+            built = datetime.now(timezone.utc).replace(microsecond=0)
+            self._send(200, to_rss(rows, meta, built).encode("utf-8"),
+                       "application/rss+xml; charset=utf-8")
 
     def do_POST(self):  # noqa: N802
         path = self.path.split("?")[0]

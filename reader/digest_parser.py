@@ -56,11 +56,13 @@ SOURCE_ALIASES = {
     "nng": "Nielsen Norman Group",
     "nielsen norman group": "Nielsen Norman Group",
     "dscout": "People Nerds (dscout)",
+    "dscout people nerds": "People Nerds (dscout)",
     "people nerds (dscout)": "People Nerds (dscout)",
     "ux collective newsletter": "UX Collective",
     "ux collective": "UX Collective",
     "the user research strategist, nikki anderson": "The User Research Strategist",
     "the user research strategist": "The User Research Strategist",
+    "user research strategist": "The User Research Strategist",
     "jan ahrend / user weekly": "User Weekly (Jan Ahrend)",
 }
 
@@ -69,6 +71,28 @@ def canonical_source(name: str) -> str:
     cleaned = (name or "").strip()
     return SOURCE_ALIASES.get(cleaned.lower(), cleaned)
 
+
+def split_byline(name: str) -> tuple[str, str | None]:
+    """Split 'Tanner Kohler, Nielsen Norman Group' into (publication, author).
+
+    Some entries credit the writer ahead of the publication. Left whole, each
+    byline becomes a source of its own and a per-source view of NN/g or UX
+    Collective misses most of their articles. Only splits when the part after
+    the last comma is a publication the digest already names on its own, so a
+    plain 'Philip Burgess' or 'Perspective AI' is left alone.
+    """
+    cleaned = (name or "").strip()
+    head, sep, tail = cleaned.rpartition(",")
+    if sep and head.strip():
+        publication = canonical_source(tail)
+        if publication in KNOWN_PUBLICATIONS:
+            return publication, head.strip()
+    return canonical_source(cleaned), None
+
+
+KNOWN_PUBLICATIONS = set(SOURCE_ALIASES.values()) | {
+    "MeasuringU", "User Interviews", "UX Planet", "Baymard Institute",
+}
 
 TRACKING_PARAMS = ("utm_", "ref_src", "ref_url", "fbclid", "gclid", "source=")
 
@@ -80,6 +104,7 @@ class Article:
     url: str | None
     source: str
     source_raw: str
+    author: str | None
     published_raw: str | None
     published_iso: str | None
     focus_area: str
@@ -362,13 +387,15 @@ def parse_post(path: str) -> tuple[Digest, list[Article]]:
                     index += 1
                 summary, note, body_url = _clean_summary(body)
                 url = head["url"] or body_url
+                source, author = split_byline(head["source"])
                 articles.append(
                     Article(
                         id=_make_id(url, head["title"], head["source"]),
                         title=head["title"],
                         url=url,
-                        source=canonical_source(head["source"]) or _source_from_url(url),
+                        source=source or _source_from_url(url),
                         source_raw=head["source"] or _source_from_url(url),
+                        author=author,
                         published_raw=head["published_raw"],
                         published_iso=_parse_date(head["published_raw"], int(year)),
                         focus_area=focus_area,

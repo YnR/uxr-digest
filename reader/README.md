@@ -67,6 +67,41 @@ git-ignored, so the repo stays summaries-only. Paywalled and JavaScript-only
 pages come back too thin to use and say so rather than answering from nothing.
 `POST /api/fetch {"article_id": "…"}` fetches one on its own.
 
+## Feeds for other clients
+
+The digest is also published as a stream any feed reader or script can
+consume. Each article is one item: its title, a link to the article, the
+digest's short summary, the date it entered the digest, its focus area and its
+source. Repeats are folded, so an article appears once.
+
+It comes in two formats with the same items:
+
+- **RSS 2.0** (`.xml`) for feed readers. The summary is the item description
+  (with an HTML version in `content:encoded`), and the focus area and source
+  are `<category>` elements whose `domain` ends in `#focus-area` or `#source`.
+- **JSON Feed 1.1** (`.json`) for apps and scripts. Each item adds a `_uxr`
+  object with `focus_area`, `source`, `author`, `published` (the article's own
+  date, when the digest gives one), `digest_date` and `note`.
+
+Published on GitHub Pages by `.github/workflows/feeds.yml` on every push to
+`main`, at `https://ynr.github.io/uxr-digest/`:
+
+| Path | What |
+| --- | --- |
+| `feed.xml`, `feed.json` | everything, newest first |
+| `topics/<slug>.xml` / `.json` | one per focus area |
+| `sources/<slug>.xml` / `.json` | one per publication |
+| `months/<YYYY-MM>.xml` / `.json` | the archive by digest month |
+| `feeds.opml` | every RSS feed, to import into a reader in one go |
+| `index.json` | catalogue of all feeds with item counts |
+| `digest.json` | the full parse, for scripts |
+
+Build them yourself with `python3 reader/feeds.py --out _site`. The local
+server also serves the stream live with any combination of filters:
+`/feed.xml` or `/feed.json`, taking `topic`, `source`, `month`, `since` and
+`until`, for example
+`http://127.0.0.1:8765/feed.xml?topic=UX+Research+Job+Market&since=2026-09-01`.
+
 ## What the parser handles
 
 `reader/digest_parser.py` reads every `posts/YYYY-MM-DD[-suffix].md` file. The

@@ -1,0 +1,45 @@
+name: Publish feeds
+
+# Rebuilds the RSS and JSON feeds whenever a digest lands on main and serves
+# them from GitHub Pages. Pages must be set to "GitHub Actions" as its source
+# (Settings → Pages) for the deploy step to succeed.
+on:
+  push:
+    branches: [main]
+    paths: ["posts/**", "reader/**", ".github/workflows/feeds.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test the parser and feeds
+        run: python -m unittest discover -s tests
+      - name: Build feeds
+        run: python reader/feeds.py --out _site --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
