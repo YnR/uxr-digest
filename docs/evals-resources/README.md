@@ -85,10 +85,6 @@ the person's real context, which raters following a rubric do not see.
 - **Format:** Article (Substack, paid). Part 1 of her "AI Evals" series.
 - **Published:** 2026-08-09
 
-**Why it sits under Lick.** It makes the same core claim, that UX and survey
-researchers' measurement skills transfer to AI evaluation, from a different
-person nearly three years later.
-
 **How it differs.** Where Lick argues researchers *should* run evals, Bakhshi
 gives them a measurement framework for doing it. She lays out a backward-design
 chain (decision, claim, construct, task set, observable evidence, judge, score)
