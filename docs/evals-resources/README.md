@@ -7,6 +7,12 @@ the format, and what the piece adds to the conversation.
 
 *Last updated: 2026-11-09.*
 
+This page is also published at <https://ynr.github.io/uxr-digest/evals/>, with
+an [RSS feed](https://ynr.github.io/uxr-digest/evals/feed.xml), a
+[JSON Feed](https://ynr.github.io/uxr-digest/evals/feed.json) and a plain
+[resources.json](https://ynr.github.io/uxr-digest/evals/resources.json) list, so
+the resources and their summaries can be read programmatically.
+
 ## How this page is organized
 
 - **Chronological, oldest first**, so the conversation reads in the order it
@@ -27,9 +33,9 @@ the format, and what the piece adds to the conversation.
 | 1a | ↳ [From UX Measurement to AI Evaluation](#1a-related-take-from-ux-measurement-to-ai-evaluation) | Saeideh Bakhshi | OpenAI | Article (paid) | 2026-08-09 |
 | 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar (on Hamel Husain's channel) | See entry | Presentation (talk with live demo) | 2026-07-03 |
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
-| 4 | [Putting the user back into AI Evaluation](#4-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
-| 4a | ↳ [The Model Got Better. Did the Experience?](#4a-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft | Article | 2026-10-22 |
-| 4b | ↳ [UXR AI Evals (Research Week 2026)](#4b-related-take-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026 (exact date not confirmed) |
+| 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026-08-20 |
+| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
+| 4b | ↳ [The Model Got Better. Did the Experience?](#4b-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft | Article | 2026-10-22 |
 | 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Nam Pham, Andrea Cavicchi | DoorDash | Article | 2026-09-18 |
 
 ---
@@ -213,68 +219,7 @@ video description.*
 
 ---
 
-## 4. Putting the user back into AI Evaluation
-
-- **Link:** <https://microsoft.design/articles/putting-the-user-back-into-ai-evaluation/>
-- **Authors:** No byline. The piece is built from conversations with three
-  researchers at Microsoft AI: **Chris Monnier** (Principal UX Researcher),
-  **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
-  Copilot UX Research team).
-- **Company at publication:** Microsoft (Microsoft AI, Copilot)
-- **Find them:** The article links no personal profiles. Chuck Kwong:
-  [Substack](https://chuckkwong.substack.com) ·
-  [LinkedIn](https://www.linkedin.com/in/charleskwong/). LinkedIn profiles for
-  Chris Monnier and Wendy Wang have not been confirmed.
-- **Format:** Article (interview, Microsoft Design; second in a series)
-- **Published:** 2026-09-17
-
-**What it adds.** An inside look at a working, product-scale eval program
-(response quality for Copilot) run with UX research at the table. The core claim:
-machine evals can check whether an answer meets the criteria you set, but only
-users can say whether it actually worked for them, and the gap between a team's
-idea of "good" and what users prefer is bigger than expected. Concrete practices
-include deriving 5 to 8 evaluation dimensions from qualitative conversations
-(Monnier), turning findings into "golden" datasets and a shared loss-pattern
-taxonomy so data science, engineering and PM use the same vocabulary (Wang),
-having real users write their own prompts rather than relying on AI-generated
-"perfect" prompts, and favoring multi-turn evals that treat a conversation as a
-prototype. Kwong argues no single discipline should own evals, but the user's
-voice is what LLM-as-judge and expert-annotator setups miss. It also separates
-evaluating a model from evaluating a whole product experience, which is harder,
-and notes that frameworks go stale fast.
-
-### 4a. Related take: The Model Got Better. Did the Experience?
-
-- **Link:** <https://chuckkwong.substack.com/p/the-model-got-better-did-the-experience>
-- **Author:** Chuck Kwong
-- **Company at publication:** Microsoft. The post draws on his team's work on
-  "User evals" at Microsoft; it gives no job title, but the Microsoft Design
-  piece above names him a Principal UX Researcher at Microsoft AI.
-- **Find them:** [Substack](https://chuckkwong.substack.com) ·
-  [LinkedIn](https://www.linkedin.com/in/charleskwong/)
-- **Format:** Article (Substack)
-- **Published:** 2026-10-22
-
-**Why it sits under the Microsoft Design piece.** It describes the same program
-and many of the same ideas (golden datasets, loss patterns, users judging their
-own interactions). Kwong was one of the three voices in the earlier interview;
-this is his own first-person account of it.
-
-**How it differs.** It names the practice, **user evals** (users judging their
-own interactions with AI), and argues that the label is clearer than "UX evals"
-or "product evals" because it says who does the evaluating. It is organized as
-four lessons: clarify what is being evaluated, capture the experience and not
-just the outcome, consider what the evidence shows, and close the loop. A
-worked example (a support assistant drafting ticket replies, compared in
-counterbalanced order by reps using their own tickets) shows how a polished,
-empathetic reply can still fail the task. It also explains why thumbs-up/down
-feedback is weak (self-selection bias) and spells out the improvement loop most
-explicitly: user findings become loss patterns, loss patterns feed golden
-datasets, and those datasets calibrate expert annotators and LLM judges against
-user judgment. It links a related talk on user evals Kwong gave at Learners with
-[Giuliano Morse](https://www.linkedin.com/in/giulianomorse/) (Meta); see 4b.
-
-### 4b. Related take: UXR AI Evals (Research Week 2026)
+## 4. UXR AI Evals (Research Week 2026)
 
 - **Link:** <https://www.youtube.com/watch?v=O6D80IgjaxI>
 - **Speakers:** Giuliano Morse (UX Researcher, Meta) and Chuck Kwong (UX
@@ -287,17 +232,11 @@ user judgment. It links a related talk on user evals Kwong gave at Learners with
 - **Format:** Presentation (about 30-minute conversation with audience Q&A at
   Learners Research Week 2026, a UX research conference in San Francisco;
   published on the [Learners YouTube channel](https://www.youtube.com/@JoinLearners))
-- **Published:** 2026. Kwong's October post says the talk was given "earlier
-  this year", and it appears in a Research Week 2026 recap dated 2026-10-11. The
-  exact talk and upload dates are not confirmed.
+- **Published:** 2026-08-20
 
-**Why it sits under the Microsoft Design piece.** It covers the same user-evals
-practice as 4 and 4a (real users with their own tasks, side-by-side comparison,
-preference data feeding judges), with Kwong as a speaker in all three. *If the
-talk turns out to predate the Microsoft Design article (2026-09-17), it should
-become the canonical entry for this group.*
-
-**How it differs.** It adds a second company's evidence and the most detail on
+**What it adds.** The earliest of three pieces on **user evals**, the practice
+of having real users judge AI output on their own tasks (4a and 4b below are
+related takes). It brings evidence from two companies and the most detail on
 how user evals plug into ML pipelines:
 
 - **Why standard human evals mislead.** At Meta, traditional human evals kept
@@ -331,8 +270,74 @@ how user evals plug into ML pipelines:
   (tone, length, structure), pair discovery interviews with post-eval attribute
   ratings and run a driver analysis against the preference signal.
 
-*Summary based on a timestamped summary of the talk supplied by Yann; the video
-page itself could not be read from this environment.*
+*Summary based on a timestamped summary of the talk supplied by Yann.*
+
+### 4a. Related take: Putting the user back into AI Evaluation
+
+- **Link:** <https://microsoft.design/articles/putting-the-user-back-into-ai-evaluation/>
+- **Authors:** No byline. The piece is built from conversations with three
+  researchers at Microsoft AI: **Chris Monnier** (Principal UX Researcher),
+  **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
+  Copilot UX Research team).
+- **Company at publication:** Microsoft (Microsoft AI, Copilot)
+- **Find them:** The article links no personal profiles. Chuck Kwong:
+  [Substack](https://chuckkwong.substack.com) ·
+  [LinkedIn](https://www.linkedin.com/in/charleskwong/). LinkedIn profiles for
+  Chris Monnier and Wendy Wang have not been confirmed.
+- **Format:** Article (interview, Microsoft Design; second in a series)
+- **Published:** 2026-09-17
+
+**Why it sits under the Research Week talk.** It covers the same user-evals
+practice (real users with their own tasks, user judgment as the ground truth
+for automated judges), published a month later, with Kwong as one of its three
+voices. The other two researchers, Monnier and Wang, make it a team view rather
+than a speaker's.
+
+**How it differs.** An inside look at a working, product-scale eval program
+(response quality for Copilot) run with UX research at the table. The core claim:
+machine evals can check whether an answer meets the criteria you set, but only
+users can say whether it actually worked for them, and the gap between a team's
+idea of "good" and what users prefer is bigger than expected. Concrete practices
+include deriving 5 to 8 evaluation dimensions from qualitative conversations
+(Monnier), turning findings into "golden" datasets and a shared loss-pattern
+taxonomy so data science, engineering and PM use the same vocabulary (Wang),
+having real users write their own prompts rather than relying on AI-generated
+"perfect" prompts, and favoring multi-turn evals that treat a conversation as a
+prototype. Kwong argues no single discipline should own evals, but the user's
+voice is what LLM-as-judge and expert-annotator setups miss. It also separates
+evaluating a model from evaluating a whole product experience, which is harder,
+and notes that frameworks go stale fast.
+
+### 4b. Related take: The Model Got Better. Did the Experience?
+
+- **Link:** <https://chuckkwong.substack.com/p/the-model-got-better-did-the-experience>
+- **Author:** Chuck Kwong
+- **Company at publication:** Microsoft. The post draws on his team's work on
+  "User evals" at Microsoft; it gives no job title, but the Microsoft Design
+  piece (4a) names him a Principal UX Researcher at Microsoft AI.
+- **Find them:** [Substack](https://chuckkwong.substack.com) ·
+  [LinkedIn](https://www.linkedin.com/in/charleskwong/)
+- **Format:** Article (Substack)
+- **Published:** 2026-10-22
+
+**Why it sits under the Research Week talk.** It describes the same program and
+many of the same ideas (golden datasets, loss patterns, users judging their own
+interactions). Kwong spoke at the talk and was interviewed for 4a; this is his
+own first-person written account.
+
+**How it differs.** It names the practice, **user evals** (users judging their
+own interactions with AI), and argues that the label is clearer than "UX evals"
+or "product evals" because it says who does the evaluating. It is organized as
+four lessons: clarify what is being evaluated, capture the experience and not
+just the outcome, consider what the evidence shows, and close the loop. A
+worked example (a support assistant drafting ticket replies, compared in
+counterbalanced order by reps using their own tickets) shows how a polished,
+empathetic reply can still fail the task. It also explains why thumbs-up/down
+feedback is weak (self-selection bias) and spells out the improvement loop most
+explicitly: user findings become loss patterns, loss patterns feed golden
+datasets, and those datasets calibrate expert annotators and LLM judges against
+user judgment. It links a related talk on user evals Kwong gave at Learners with
+[Giuliano Morse](https://www.linkedin.com/in/giulianomorse/) (Meta); see 4.
 
 ---
 
@@ -370,7 +375,7 @@ an untrained judge on held-out data. It closes with a caution: human taste is
 inconsistent, so a judge can only be as consistent as the human baseline, and
 over-optimizing agreement leads to "number gaming".
 
-**How it relates to others.** It shares the Microsoft Design piece's (4) core
+**How it relates to others.** It shares the Microsoft Design piece's (4a) core
 idea of calibrating automated judges against user judgment, published a day
 later by a different team. It stays a separate entry because its main
 contribution, the Fit / Authority / Boundaries framework for choosing whose
@@ -387,3 +392,8 @@ their company at publication, links to their blog and/or LinkedIn, the format
 adds. If it largely overlaps an existing entry, list it under the older one as a
 related take and say how it differs. If a page cannot be read, say so in the
 entry.
+
+Keep each entry to the same shape (a `## N.` or `### Na. Related take:`
+heading, the `- **Field:**` list, then sections that open with a bold lead-in
+such as `**What it adds.**`), because `reader/evals_resources.py` builds the
+published page and feeds from it.
