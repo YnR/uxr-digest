@@ -26,7 +26,7 @@ the resources and their summaries can be read programmatically.
 |---|----------|-----------|------------------------|--------|-----------|
 | 1 | [How UX Research Can Meet the Moment](#1-how-ux-research-can-meet-the-moment) | David J. Lick | Google | Article | 2023-10-07 |
 | 1a | ↳ [From UX Measurement to AI Evaluation](#1a-related-take-from-ux-measurement-to-ai-evaluation) | Saeideh Bakhshi | OpenAI | Article (paid) | 2026-08-09 |
-| 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar (on Hamel Husain's channel) | See entry | Presentation (talk with live demo) | 2026-07-03 |
+| 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar, Hamel Husain | OpenAI (Husain); none (Shankar) | Presentation (talk with live demo) | 2026-07-03 |
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
 | 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026-08-20 |
 | 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
@@ -104,12 +104,9 @@ transfer and which need new fluency is paywalled.*
 - **Speakers:** Shreya Shankar, with Hamel Husain introducing and closing, on
   his YouTube channel. It is part 1 of a 12-part mini-course on AI product
   engineering.
-- **Company at publication:** The description calls Shankar "a CS professor and
-  co-creator of the AI Evals course on Maven" (taught with Husain under Parlance
-  Labs). Her [site](https://www.sh-reya.com) says she did her PhD at UC Berkeley
-  and joins Carnegie Mellon University as an Assistant Professor in 2027; it
-  does not make clear which institution she was at in July 2026. Husain
-  describes himself as an ML engineer formerly at Airbnb and GitHub.
+- **Company at publication:** Hamel Husain: OpenAI (ML engineer). Shreya Shankar:
+  no affiliation at the time; she co-teaches the AI Evals course on Maven with
+  Husain.
 - **Find them:** Shreya Shankar: [site](https://www.sh-reya.com) ·
   [blog](https://www.sh-reya.com/blog) ·
   [LinkedIn](https://www.linkedin.com/in/shrshn). Hamel Husain:
