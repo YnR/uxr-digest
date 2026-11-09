@@ -63,11 +63,12 @@ class SourcesFileTest(unittest.TestCase):
 
     def test_the_monitored_sources_are_listed(self):
         monitored = {row["name"] for row in self.rows if row["monitored"]}
-        self.assertEqual(len(monitored), 11)
+        self.assertEqual(len(monitored), 12)
         for name in ("Nielsen Norman Group", "Baymard Institute", "MeasuringU",
                      "UX Collective", "People Nerds (dscout)", "User Interviews",
                      "UX Design Weekly", "Dense Discovery", "Sidebar",
-                     "Quantitative UX Research Blog", "Research toolbox"):
+                     "Quantitative UX Research Blog", "Research toolbox",
+                     "Chuck Kwong"):
             self.assertIn(name, monitored)
 
 
