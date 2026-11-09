@@ -167,21 +167,49 @@ description.*
 - **Link:** <https://www.youtube.com/watch?v=VfA-vjsFQ1o>
 - **Speaker:** Setor Zilevu
 - **Company at publication:** Figma (as stated in the video title). His job
-  title is not given.
+  title is not given; he describes a background in computer science applied to
+  healthcare and assistive cyber-human systems at Emory University.
 - **Find them:** [LinkedIn](https://www.linkedin.com/in/setor-zilevu/)
 - **Format:** Presentation (Config 2026 talk, published on Figma's channel)
 - **Published:** 2026-07-06
 
 **What it adds.** A design-tool company's case that evals belong to designers
-and researchers, not only engineers. The talk frames AI evaluation as something
-that has mostly been treated as an engineering problem, argues that the teams
-doing well with AI are the ones measuring carefully rather than just shipping
-fast, and puts the definition of "good", from a human-centered standpoint, at
-the center of the work. Its strategic claim is that as model capabilities become
-commoditized, design becomes the lasting advantage, so designers and researchers
-should "own the loop" of deciding how AI is judged against real human needs.
-*Summary based on the video description only; the talk itself was not
-transcribed.*
+and researchers, with a ready vocabulary for making it. It opens with a
+cautionary story: a home-rehab app told a stroke survivor his mobility was
+improving, while a physical therapist could see he was compensating by
+hyperextending his shoulder. The model was correct to its spec and still wrong,
+because nobody checked its definition of "good" against the therapist's
+expertise.
+
+- **What an eval is.** An exercise where the room splits evenly on two
+  AI-generated designs makes the point that in AI work, disagreement is the
+  data: an eval distills subjective disagreement into shared, measurable
+  criteria and uses them to steer outputs.
+- **Two myths.** That evals are engineering-only (generating output is half
+  the job; judging it, and saying why, takes research and design), and that
+  "good" can be defined once (probabilistic outputs and rising expectations
+  mean quality must be directed continuously: define intent, set criteria,
+  measure, learn, repeat).
+- **Three layers.** Human evals (calibrated expert rubrics; the ground truth,
+  but slow), auto evals (an LLM applying the same rubric at scale, "only as good
+  as the human alignment they learn from", otherwise "scaling noise"), and UX
+  evals (users in real context, with signals that feed model-level fixes, not
+  just UI changes).
+- **Skills that map across.** Defining a north star becomes writing the
+  rubric; interpreting user disagreement becomes calibrating graders;
+  synthesizing edge cases becomes triaging failure modes; recruiting personas
+  becomes curating eval datasets.
+- **Figma's flywheel.** For its agent features, the team prioritized a few
+  high-impact use cases, calibrated raters on rubrics (content quality,
+  response quality, prompt success), isolated frequent and severe failure
+  modes, and handed failure clusters to engineers to fix prompts and harnesses,
+  with results reported to the Chief Design Officer and leadership.
+- **Four levers designers and researchers can own:** system prompts, eval
+  design ("whoever defines the rubric defines the target"), datasets, and the
+  agent's capabilities and tooling.
+
+*Summary based on a timestamped summary of the talk supplied by Yann, plus the
+video description.*
 
 ---
 
