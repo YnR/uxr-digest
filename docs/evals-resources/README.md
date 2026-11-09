@@ -148,9 +148,7 @@ apply that judgment faster, not replace it.
 
 For researchers, its closing idea is the bridge: evaluation is about
 externalizing tacit domain taste into code, prompts and harnesses, and error
-analysis is close to qualitative coding done on model traces. *Summary based on
-a timestamped summary of the video supplied by Yann, plus the video
-description.*
+analysis is close to qualitative coding done on model traces.
 
 ---
 
@@ -197,9 +195,6 @@ expertise.
 - **Four levers designers and researchers can own:** system prompts, eval
   design ("whoever defines the rubric defines the target"), datasets, and the
   agent's capabilities and tooling.
-
-*Summary based on a timestamped summary of the talk supplied by Yann, plus the
-video description.*
 
 ---
 
@@ -253,8 +248,6 @@ how user evals plug into ML pipelines:
   surface rare tool-calling failures. To untangle many implicit dimensions
   (tone, length, structure), pair discovery interviews with post-eval attribute
   ratings and run a driver analysis against the preference signal.
-
-*Summary based on a timestamped summary of the talk supplied by Yann.*
 
 ### 4a. Related take: Putting the user back into AI Evaluation
 
