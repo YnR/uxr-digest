@@ -222,30 +222,62 @@ user judgment. It links a related talk on user evals Kwong gave at Learners with
 ### 4b. Related take: UXR AI Evals (Research Week 2026)
 
 - **Link:** <https://www.youtube.com/watch?v=O6D80IgjaxI>
-- **Speakers:** Giuliano Morse and Chuck Kwong
-- **Company at publication:** Morse, Meta; Kwong, Microsoft. Both affiliations
-  come from Kwong's post (4a); the video's own description could not be read.
+- **Speakers:** Giuliano Morse (UX Researcher, Meta) and Chuck Kwong (UX
+  Researcher, Microsoft AI)
+- **Company at publication:** Meta and Microsoft
 - **Find them:** Giuliano Morse:
   [LinkedIn](https://www.linkedin.com/in/giulianomorse/). Chuck Kwong:
   [Substack](https://chuckkwong.substack.com) ·
   [LinkedIn](https://www.linkedin.com/in/charleskwong/)
-- **Format:** Presentation (talk at Learners Research Week 2026, a UX research
-  conference in San Francisco; published on the
-  [Learners YouTube channel](https://www.youtube.com/@JoinLearners))
+- **Format:** Presentation (about 30-minute conversation with audience Q&A at
+  Learners Research Week 2026, a UX research conference in San Francisco;
+  published on the [Learners YouTube channel](https://www.youtube.com/@JoinLearners))
 - **Published:** 2026. Kwong's October post says the talk was given "earlier
   this year", and it appears in a Research Week 2026 recap dated 2026-10-11. The
   exact talk and upload dates are not confirmed.
 
-**Why it sits under the Microsoft Design piece.** Kwong describes it as a talk
-on user evals, the same practice covered in 4 and 4a, so it is grouped here. It
-adds a second company's view: Morse is at Meta, so the talk is not only
-Microsoft's program. *If the talk turns out to predate the Microsoft Design
-article (2026-09-17), it should become the canonical entry for this group.*
+**Why it sits under the Microsoft Design piece.** It covers the same user-evals
+practice as 4 and 4a (real users with their own tasks, side-by-side comparison,
+preference data feeding judges), with Kwong as a speaker in all three. *If the
+talk turns out to predate the Microsoft Design article (2026-09-17), it should
+become the canonical entry for this group.*
 
-**What it adds.** *Not summarized, because the video page could not be read.*
-Only its title, channel and speakers were confirmed, from YouTube's embed data.
-The talk's content, and how much of it overlaps with 4 and 4a, still need to be
-checked.
+**How it differs.** It adds a second company's evidence and the most detail on
+how user evals plug into ML pipelines:
+
+- **Why standard human evals mislead.** At Meta, traditional human evals kept
+  ranking an internal model ahead of competitors, against both leadership
+  intuition and real user experience. Annotators rated raw API calls in a
+  sandbox, bypassing system prompts, retrieval and tool calls; moving to real
+  users on the full end-to-end product brought eval results in line with
+  product performance.
+- **The workflow.** A user brings an authentic task, does it with Model A, then
+  Model B, makes a comparative preference judgment, and Likert ratings plus
+  AI-moderated follow-up probing capture why. Early prototypes found
+  side-by-side comparison far richer than single-model review.
+- **Outputs are engineering assets, not just decks.** The preference data trains
+  reward models, fine-tunes classifiers, calibrates LLM judges and steers
+  production models. Showing the gap between annotator and user evals is what
+  won cross-functional buy-in.
+- **Where judges fail.** LLM judges handle objective criteria (latency,
+  factuality) but struggle with tone, humor and contextual fit, and annotators
+  told to "pretend" to be users miss nuance. Its memorable example: for beach
+  wedding footwear, a model recommended designer stilettos, rated highly by
+  automated and human annotators, while real users pointed out that heels sink
+  into sand.
+- **Practical advice.** Static rubrics go stale because user baselines shift as
+  people use several frontier models daily. Researchers can start at the
+  prompt layer, without touching model training; user evals also catch product
+  defects outside the model (UI, copy, copy-paste); and evaluate what happens
+  after the output, not just whether it is correct.
+- **From the Q&A.** For agentic systems, split samples between naturalistic
+  sessions and targeted scenarios (for example, assigned shopping tasks) to
+  surface rare tool-calling failures. To untangle many implicit dimensions
+  (tone, length, structure), pair discovery interviews with post-eval attribute
+  ratings and run a driver analysis against the preference signal.
+
+*Summary based on a timestamped summary of the talk supplied by Yann; the video
+page itself could not be read from this environment.*
 
 ---
 
