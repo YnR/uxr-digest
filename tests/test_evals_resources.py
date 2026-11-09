@@ -25,7 +25,7 @@ SAMPLE = """# Resources
 
 - **Link:** <https://example.test/first>
 - **Author:** Ada Example
-- **Company at publication:** Acme
+- **Affiliation(s):** Acme
 - **Find them:** [Blog](https://ada.example) ·
   [LinkedIn](https://www.linkedin.com/in/ada/)
 - **Format:** Article (blog)
@@ -103,6 +103,19 @@ class InlineTest(unittest.TestCase):
         self.assertIn('<a href="https://b.test">t</a>', html)
         self.assertIn("<code>c</code>", html)
         self.assertIn("&lt;b&gt;", html)
+
+    def test_related_takes_are_nested(self):
+        from evals_resources import markdown_html
+        html = markdown_html(SAMPLE + "\n| # | R |\n|---|---|\n| 1 | a |\n| 1a | ↳ b |\n")
+        self.assertEqual(html.count('<section class="related">'), 1)
+        self.assertEqual(html.count("</section>"), 1)
+        self.assertLess(html.index('<section class="related">'), html.index('id="1a-related-take-second-piece"'))
+        self.assertLess(html.index("It goes further"), html.index("</section>"))
+        self.assertLess(html.index("</section>"), html.index("<hr>"))
+        self.assertIn('<tr class="sub"><td>1a</td><td>b</td>', html)
+        self.assertEqual(html.count('<div class="meta">'), 2)
+        self.assertIn('<a class="open" href="https://example.test/first">Open on example.test', html)
+        self.assertIn("<dt>Affiliation(s)</dt><dd>Acme</dd>", html)
 
     def test_plain_text_and_anchor(self):
         self.assertEqual(plain_text("See [the post](https://x.test) *now*"), "See the post now")

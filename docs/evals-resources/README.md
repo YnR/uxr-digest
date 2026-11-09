@@ -1,9 +1,7 @@
 # AI Evals Resources
 
 A running collection of writing, talks and videos on evaluating AI systems, with
-a focus on what UX research and design bring to evals. Each entry records who
-made the argument, where they worked when they published it, where to find them,
-the format, and what the piece adds to the conversation.
+a focus on what UX research and design bring to evals.
 
 *Last updated: 2026-11-09.*
 
@@ -21,21 +19,18 @@ the resources and their summaries can be read programmatically.
   same ground, the older one is the canonical entry and the newer one is listed
   under it as a *related take* from a different person, with a note on how it
   differs.
-- **Only what could be checked.** Details come from the resource itself or the
-  author's own pages. Where a page could not be fetched, or a detail was not
-  stated, the entry says so instead of filling the gap.
 
 ## At a glance
 
-| # | Resource | Author(s) | Company at publication | Format | Published |
+| # | Resource | Author(s) | Affiliation(s) | Format | Published |
 |---|----------|-----------|------------------------|--------|-----------|
 | 1 | [How UX Research Can Meet the Moment](#1-how-ux-research-can-meet-the-moment) | David J. Lick | Google | Article | 2023-10-07 |
 | 1a | ↳ [From UX Measurement to AI Evaluation](#1a-related-take-from-ux-measurement-to-ai-evaluation) | Saeideh Bakhshi | OpenAI | Article (paid) | 2026-08-09 |
-| 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar (on Hamel Husain's channel) | See entry | Presentation (talk with live demo) | 2026-07-03 |
+| 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar, Hamel Husain | OpenAI (Husain) | Presentation (talk with live demo) | 2026-07-03 |
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
-| 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026-08-20 |
-| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
-| 4b | ↳ [The Model Got Better. Did the Experience?](#4b-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft | Article | 2026-10-22 |
+| 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft AI | Presentation (conference talk) | 2026-08-20 |
+| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft AI | Article (interview) | 2026-09-17 |
+| 4b | ↳ [The Model Got Better. Did the Experience?](#4b-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft AI | Article | 2026-10-22 |
 | 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Nam Pham, Andrea Cavicchi | DoorDash | Article | 2026-09-18 |
 
 ---
@@ -44,11 +39,7 @@ the resources and their summaries can be read programmatically.
 
 - **Link:** <https://medium.com/@davidjameslick/how-ux-research-can-meet-the-moment-3e145acb5471>
 - **Author:** David J. Lick, PhD
-- **Company at publication:** Google. The byline says Senior UX Researcher; the
-  body says he was a research manager, and his
-  [UXPA Magazine bio](https://uxpamagazine.org/author/david-lick/) describes him
-  managing a Google UX Research team focused on AI and human productivity
-  (previously Facebook and Vine).
+- **Affiliation(s):** Google (UX Research Manager, Google Docs)
 - **Find them:** [Medium](https://medium.com/@davidjameslick) ·
   [LinkedIn](https://www.linkedin.com/in/david-lick-10b28a105/)
 - **Format:** Article (Medium, 6 min)
@@ -74,24 +65,24 @@ following up, including Howcroft et al. (2020),
 and Gatt & Krahmer (2018),
 [*Survey of the State of the Art in Natural Language Generation*](https://www.jair.org/index.php/jair/article/view/11173).
 
+**In context.** The piece predates two later shifts in the conversation:
+automated judging (machine and LLM-as-judge evals) and **user evals**, where real
+users judge output on their own tasks (see 4). Lick treats human evals by
+trained raters as the gold standard; later work argues that user evals are the
+more canonical judgment, because they are more ecologically valid: they capture
+the person's real context, which raters following a rubric do not see.
+
 ### 1a. Related take: From UX Measurement to AI Evaluation
 
 - **Link:** <https://saeidehbakhshi.substack.com/p/what-ux-and-survey-researchers-bring>
 - **Author:** Saeideh Bakhshi
-- **Company at publication:** OpenAI. Her About page and
-  [personal site](https://saeideh.com) say she is a quantitative UX research
-  leader currently at OpenAI (previously Meta, Google, Block and Yahoo), and that
-  her views are her own. The post itself does not restate her employer.
+- **Affiliation(s):** OpenAI
 - **Find them:** [Research toolbox (Substack)](https://saeidehbakhshi.substack.com) ·
   [LinkedIn](https://www.linkedin.com/in/saeideh-bakhshi-68a3676/) ·
   [saeideh.com](https://saeideh.com) · book project:
   [Building AI Evals](https://humancenteredevals.com/)
 - **Format:** Article (Substack, paid). Part 1 of her "AI Evals" series.
 - **Published:** 2026-08-09
-
-**Why it sits under Lick.** It makes the same core claim, that UX and survey
-researchers' measurement skills transfer to AI evaluation, from a different
-person nearly three years later.
 
 **How it differs.** Where Lick argues researchers *should* run evals, Bakhshi
 gives them a measurement framework for doing it. She lays out a backward-design
@@ -112,12 +103,7 @@ transfer and which need new fluency is paywalled.*
 - **Speakers:** Shreya Shankar, with Hamel Husain introducing and closing, on
   his YouTube channel. It is part 1 of a 12-part mini-course on AI product
   engineering.
-- **Company at publication:** The description calls Shankar "a CS professor and
-  co-creator of the AI Evals course on Maven" (taught with Husain under Parlance
-  Labs). Her [site](https://www.sh-reya.com) says she did her PhD at UC Berkeley
-  and joins Carnegie Mellon University as an Assistant Professor in 2027; it
-  does not make clear which institution she was at in July 2026. Husain
-  describes himself as an ML engineer formerly at Airbnb and GitHub.
+- **Affiliation(s):** Hamel Husain: OpenAI
 - **Find them:** Shreya Shankar: [site](https://www.sh-reya.com) ·
   [blog](https://www.sh-reya.com/blog) ·
   [LinkedIn](https://www.linkedin.com/in/shrshn). Hamel Husain:
@@ -172,9 +158,7 @@ description.*
 
 - **Link:** <https://www.youtube.com/watch?v=VfA-vjsFQ1o>
 - **Speaker:** Setor Zilevu
-- **Company at publication:** Figma (as stated in the video title). His job
-  title is not given; he describes a background in computer science applied to
-  healthcare and assistive cyber-human systems at Emory University.
+- **Affiliation(s):** Figma
 - **Find them:** [LinkedIn](https://www.linkedin.com/in/setor-zilevu/)
 - **Format:** Presentation (Config 2026 talk, published on Figma's channel)
 - **Published:** 2026-07-06
@@ -224,7 +208,7 @@ video description.*
 - **Link:** <https://www.youtube.com/watch?v=O6D80IgjaxI>
 - **Speakers:** Giuliano Morse (UX Researcher, Meta) and Chuck Kwong (UX
   Researcher, Microsoft AI)
-- **Company at publication:** Meta and Microsoft
+- **Affiliation(s):** Giuliano Morse: Meta. Chuck Kwong: Microsoft AI
 - **Find them:** Giuliano Morse:
   [LinkedIn](https://www.linkedin.com/in/giulianomorse/). Chuck Kwong:
   [Substack](https://chuckkwong.substack.com) ·
@@ -279,19 +263,13 @@ how user evals plug into ML pipelines:
   researchers at Microsoft AI: **Chris Monnier** (Principal UX Researcher),
   **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
   Copilot UX Research team).
-- **Company at publication:** Microsoft (Microsoft AI, Copilot)
+- **Affiliation(s):** Microsoft AI
 - **Find them:** The article links no personal profiles. Chuck Kwong:
   [Substack](https://chuckkwong.substack.com) ·
   [LinkedIn](https://www.linkedin.com/in/charleskwong/). LinkedIn profiles for
   Chris Monnier and Wendy Wang have not been confirmed.
 - **Format:** Article (interview, Microsoft Design; second in a series)
 - **Published:** 2026-09-17
-
-**Why it sits under the Research Week talk.** It covers the same user-evals
-practice (real users with their own tasks, user judgment as the ground truth
-for automated judges), published a month later, with Kwong as one of its three
-voices. The other two researchers, Monnier and Wang, make it a team view rather
-than a speaker's.
 
 **How it differs.** An inside look at a working, product-scale eval program
 (response quality for Copilot) run with UX research at the table. The core claim:
@@ -312,18 +290,11 @@ and notes that frameworks go stale fast.
 
 - **Link:** <https://chuckkwong.substack.com/p/the-model-got-better-did-the-experience>
 - **Author:** Chuck Kwong
-- **Company at publication:** Microsoft. The post draws on his team's work on
-  "User evals" at Microsoft; it gives no job title, but the Microsoft Design
-  piece (4a) names him a Principal UX Researcher at Microsoft AI.
+- **Affiliation(s):** Microsoft AI
 - **Find them:** [Substack](https://chuckkwong.substack.com) ·
   [LinkedIn](https://www.linkedin.com/in/charleskwong/)
 - **Format:** Article (Substack)
 - **Published:** 2026-10-22
-
-**Why it sits under the Research Week talk.** It describes the same program and
-many of the same ideas (golden datasets, loss patterns, users judging their own
-interactions). Kwong spoke at the talk and was interviewed for 4a; this is his
-own first-person written account.
 
 **How it differs.** It names the practice, **user evals** (users judging their
 own interactions with AI), and argues that the label is clearer than "UX evals"
@@ -346,7 +317,7 @@ user judgment. It links a related talk on user evals Kwong gave at Learners with
 - **Link:** <https://medium.com/design-doordash/building-ai-evals-who-gets-to-decide-whats-good-39671385f50d>
 - **Authors:** Nam Pham (senior researcher) and Andrea Cavicchi (staff
   researcher), published under the DoorDash Design Team byline
-- **Company at publication:** DoorDash (UX Research)
+- **Affiliation(s):** DoorDash
 - **Find them:** Nam Pham: [LinkedIn](https://www.linkedin.com/in/namph/).
   Andrea Cavicchi: [LinkedIn](https://www.linkedin.com/in/andreakc/).
   Publication: [Design @ DoorDash](https://medium.com/design-doordash)
@@ -387,7 +358,7 @@ concrete example of the skills Lick (1) and Bakhshi (1a) say transfer to evals.
 ## Adding a resource
 
 Add the new entry in date order and add a row to the table. Record the author,
-their company at publication, links to their blog and/or LinkedIn, the format
+their affiliation(s) at publication, links to their blog and/or LinkedIn, the format
 (article, podcast or presentation), the publication date and what the piece
 adds. If it largely overlaps an existing entry, list it under the older one as a
 related take and say how it differs. If a page cannot be read, say so in the

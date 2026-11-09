@@ -8,7 +8,7 @@ resources are edited. This script reads it and writes:
   index.html       the page itself, rendered for GitHub Pages
   feed.xml         RSS 2.0, one item per resource, newest publication first
   feed.json        JSON Feed 1.1, same items, plus a `_evals` object with the
-                   structured fields (authors, company, format, dates, profile
+                   structured fields (authors, affiliations as `company`, format, dates, profile
                    links, the entry it is grouped under)
   resources.json   every resource in page order, for scripts
 
@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+from urllib.parse import urlparse
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from html import escape as html_escape
@@ -47,7 +48,8 @@ SECTION_LEAD = re.compile(r"^\*\*([^*]+?)\.\*\*\s*(.*)$", re.S)
 ISO_DATE = re.compile(r"^(\d{4}-\d{2}-\d{2})\b")
 FIELD_KEYS = {
     "link": "url", "author": "authors", "authors": "authors", "speaker": "authors",
-    "speakers": "authors", "company at publication": "company",
+    "speakers": "authors", "affiliation(s)": "company", "affiliations": "company",
+    "affiliation": "company", "company at publication": "company",
     "find them": "find_them", "format": "format", "published": "published",
 }
 
@@ -145,28 +147,73 @@ def _blocks(lines: list[str]) -> list[tuple[str, list[str]]]:
     return blocks
 
 
+def _meta_html(items: list[str]) -> str:
+    """An entry's `- **Field:** value` list as a metadata card: the link becomes
+    a button naming its site, the rest a label/value grid."""
+    link, rows = "", []
+    for item in items:
+        m = FIELD_LINE.match("- " + item)
+        label, value = m.group(1), m.group(2).strip()
+        url = re.search(r"<(https?://[^>]+)>", value)
+        if label.lower() == "link" and url:
+            host = urlparse(url.group(1)).netloc.removeprefix("www.")
+            link = (f'<a class="open" href="{html_escape(url.group(1))}">'
+                    f'Open on {html_escape(host)} <span aria-hidden="true">↗</span></a>')
+            continue
+        rows.append(f"<dt>{html_escape(label)}</dt><dd>{inline_html(value)}</dd>")
+    return f'<div class="meta"><dl>{"".join(rows)}</dl>{link}</div>'
+
+
+SUB_ID = re.compile(r"^\d+[a-z]$")
+
+
 def markdown_html(text: str) -> str:
+    """Render the page. A related take (`### Na.`) and everything under it, up to
+    the next heading or rule, is wrapped in `<section class="related">` so it
+    reads as nested under its canonical entry."""
     out = []
+    in_related = False
+
+    def close_related() -> None:
+        nonlocal in_related
+        if in_related:
+            out.append("</section>")
+            in_related = False
+
     for kind, lines in _blocks(text.splitlines()):
         if kind == "heading":
             level = len(lines[0]) - len(lines[0].lstrip("#"))
             title = lines[0][level:].strip()
-            out.append(f'<h{level} id="{heading_anchor(title)}">{inline_html(title)}</h{level}>')
+            close_related()
+            heading = f'<h{level} id="{heading_anchor(title)}">{inline_html(title)}</h{level}>'
+            if level == 3 and ENTRY_HEADING.match(lines[0]):
+                m = re.match(r"^(\d+[a-z]?)\. (?:Related take:\s*)?(.+)$", title)
+                heading = (f'<h3 id="{heading_anchor(title)}"><span class="label">Related take '
+                           f'{html_escape(m.group(1))}</span>{inline_html(m.group(2))}</h3>')
+                out.append('<section class="related">')
+                in_related = True
+            out.append(heading)
         elif kind == "rule":
+            close_related()
             out.append("<hr>")
         elif kind == "table":
             rows = [[c.strip() for c in r.strip().strip("|").split("|")] for r in lines]
             body = [r for r in rows[1:] if not all(re.fullmatch(r":?-+:?", c) for c in r)]
             head = "".join(f"<th>{inline_html(c)}</th>" for c in rows[0])
-            trs = "".join("<tr>" + "".join(f"<td>{inline_html(c)}</td>" for c in r) + "</tr>"
-                          for r in body)
+            trs = "".join(
+                ('<tr class="sub">' if r and SUB_ID.match(r[0]) else "<tr>")
+                + "".join(f"<td>{inline_html(c.replace('↳', '').strip())}</td>" for c in r)
+                + "</tr>" for r in body)
             out.append(f'<div class="table"><table><thead><tr>{head}</tr></thead>'
                        f"<tbody>{trs}</tbody></table></div>")
+        elif kind == "ul" and lines and all(FIELD_LINE.match("- " + item) for item in lines):
+            out.append(_meta_html(lines))
         elif kind in ("ul", "ol"):
             items = "".join(f"<li>{inline_html(item)}</li>" for item in lines)
             out.append(f"<{kind}>{items}</{kind}>")
         else:
             out.append(f"<p>{inline_html(lines[0])}</p>")
+    close_related()
     return "\n".join(out)
 
 
@@ -261,7 +308,7 @@ def _published_datetime(day: str) -> datetime:
 
 def _item_html(e: dict, by_id: dict) -> str:
     parts = []
-    facts = [("By", e["authors"]), ("Company at publication", e["company"]),
+    facts = [("By", e["authors"]), ("Affiliation(s)", e["company"]),
              ("Format", e["format"]), ("Published", e["published"])]
     if e["related_to"] and e["related_to"] in by_id:
         facts.append(("Grouped under", by_id[e["related_to"]]["title"]))
@@ -363,11 +410,11 @@ def to_html(markdown: str, base_url: str) -> str:
 <link rel="alternate" type="application/rss+xml" title="{FEED_TITLE} (RSS)" href="{base_url}feed.xml">
 <link rel="alternate" type="application/feed+json" title="{FEED_TITLE} (JSON Feed)" href="{base_url}feed.json">
 <style>
-:root {{ --bg:#fbfaf7; --fg:#1f2328; --muted:#5b6370; --line:#e3e0d8; --accent:#2f5bd3; --card:#ffffff; }}
+:root {{ --bg:#fbfaf7; --fg:#1f2328; --muted:#5b6370; --line:#e3e0d8; --accent:#2f5bd3; --card:#ffffff; --sub:#f1f4fb; }}
 @media (prefers-color-scheme: dark) {{
-  :root:not([data-theme="light"]) {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; }}
+  :root:not([data-theme="light"]) {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; --sub:#1d2433; }}
 }}
-:root[data-theme="dark"] {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; }}
+:root[data-theme="dark"] {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; --sub:#1d2433; }}
 * {{ box-sizing:border-box; }}
 body {{ margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }}
 main {{ max-width:46rem; margin:0 auto; padding:2rem 16px 4rem; }}
@@ -381,9 +428,26 @@ li {{ margin:.25rem 0; }}
 code {{ font-size:.9em; background:var(--card); border:1px solid var(--line); border-radius:4px; padding:0 .25rem; }}
 .subscribe {{ color:var(--muted); font-size:.95rem; border:1px solid var(--line); background:var(--card); border-radius:8px; padding:.6rem .9rem; }}
 .table {{ overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--card); }}
-table {{ border-collapse:collapse; width:100%; font-size:.9rem; }}
+table {{ border-collapse:collapse; width:100%; min-width:40rem; font-size:.9rem; }}
 th, td {{ text-align:left; vertical-align:top; padding:.5rem .6rem; border-bottom:1px solid var(--line); }}
 tr:last-child td {{ border-bottom:0; }}
+tr.sub td {{ background:var(--sub); font-size:.85rem; color:var(--muted); }}
+tr.sub td:first-child {{ box-shadow:inset 3px 0 0 var(--accent); padding-left:1rem; }}
+tr.sub td:nth-child(2) {{ padding-left:1.5rem; position:relative; }}
+tr.sub td:nth-child(2)::before {{ content:"↳"; position:absolute; left:.5rem; color:var(--accent); }}
+tr.sub a {{ color:var(--accent); }}
+section.related {{ margin:2rem 0 0 .25rem; padding:.25rem 1.1rem 1rem; border-left:3px solid var(--accent); background:var(--sub); border-radius:0 8px 8px 0; }}
+section.related h3 {{ margin-top:1rem; padding-left:0; border-left:0; }}
+section.related + section.related {{ margin-top:1.25rem; }}
+.meta {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem; margin:1rem 0 1.25rem; }}
+.meta dl {{ display:grid; grid-template-columns:max-content 1fr; gap:.45rem 1rem; margin:0; }}
+.meta dt {{ font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:.2rem; }}
+.meta dd {{ margin:0; }}
+.meta .open {{ display:inline-block; margin-top:.9rem; padding:.4rem .8rem; border:1px solid var(--accent); border-radius:999px; text-decoration:none; font-size:.9rem; font-weight:600; }}
+.meta .open:hover {{ background:var(--accent); color:var(--card); }}
+section.related .meta {{ background:var(--bg); }}
+@media (max-width: 520px) {{ .meta dl {{ grid-template-columns:1fr; gap:.1rem; }} .meta dd {{ margin-bottom:.5rem; }} }}
+h3 .label {{ display:block; font-size:.75rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:.2rem; }}
 </style>
 </head>
 <body>
