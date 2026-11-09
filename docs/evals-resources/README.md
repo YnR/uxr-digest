@@ -103,8 +103,9 @@ transfer and which need new fluency is paywalled.*
 ## 2. How to Automate AI Evals (Correctly)
 
 - **Link:** <https://www.youtube.com/watch?v=tqUDjc1HzO4>
-- **Speaker:** Shreya Shankar, on Hamel Husain's YouTube channel. The
-  description does not say whether Husain also speaks.
+- **Speakers:** Shreya Shankar, with Hamel Husain introducing and closing, on
+  his YouTube channel. It is part 1 of a 12-part mini-course on AI product
+  engineering.
 - **Company at publication:** The description calls Shankar "a CS professor and
   co-creator of the AI Evals course on Maven" (taught with Husain under Parlance
   Labs). Her [site](https://www.sh-reya.com) says she did her PhD at UC Berkeley
@@ -120,18 +121,44 @@ transfer and which need new fluency is paywalled.*
 - **Published:** 2026-07-03
 
 **What it adds.** The practitioner and tooling view, from people who teach evals
-to engineers. Its central point is order of operations: do error analysis on
-your real logs before writing evals, because writing a rubric before looking at
-any data is a common mistake. Error analysis, reading and annotating traces to
-build a failure-mode taxonomy, is presented as the most human-intensive part of
-evals and the part no tool can fully automate. The session covers an
-analyze-measure-improve lifecycle, three mistakes (asking AI to just "find the
-issues", reviewing data only once, holding every app to the same accuracy bar),
-a live build of a review interface, and an "Error Discovery" skill that updates
-the taxonomy as you annotate and uses active learning to pick the next examples.
-For researchers, it is a useful bridge: error analysis is close to qualitative
-coding, done on model traces. *Summary based on the video description and
-chapter list; no transcript was available.*
+to engineers, and a clear answer to "can't an agent just do our evals?" No, for
+an epistemic reason: what "good" means for a product lives in the builder's
+domain judgment, not in the traces. AI tooling should help people express and
+apply that judgment faster, not replace it.
+
+- **A three-step lifecycle.** Error analysis (read traces to discover failure
+  modes), measurement (count how often each occurs; a few modes usually cause
+  most issues) and improvement (prompts, model changes, fine-tuning,
+  guardrails). AI is weak at the first step because it lacks product taste,
+  and strong downstream once failure modes are well defined.
+- **Mistake 1: pointing an agent at your logs and asking it to "find the
+  issues".** It misses taste issues that were never written down, flags vague
+  or minor problems while missing severe ones (hallucinations, off-brand
+  output), and keeps no state between runs. The better pattern is an agent
+  skill that builds a review app: it samples and clusters traces, color-codes
+  key fields, and watches as the human tags errors, turning those tags into a
+  failure taxonomy in the background. The live demo does this on 33
+  AI-written blog posts, picking 21 representative samples and naming
+  categories such as "contrastive framing" ("it's not just X, it's Y") from
+  her highlights.
+- **Mistake 2: reviewing traces only once.** More data changes your mental
+  model, so earlier traces deserve a second look. Run an outer loop over the
+  data and an inner loop over failure hypotheses, and have the agent search
+  past and unlabeled traces for new failure modes for quick human
+  confirmation.
+- **Mistake 3: one accuracy bar for every app.** A low-risk internal summarizer
+  can tolerate errors that a customer-facing or high-stakes tool cannot. Ask
+  an agent to brainstorm worst-case outcomes (privacy leaks, fabricated
+  citations) and work back to the guardrails and evals needed.
+- **On vendors.** In Shankar's ongoing benchmarking, general coding agents with
+  custom prompts and harnesses often match or beat dedicated eval discovery
+  tools; Husain adds that many platforms are essentially prompt wrappers.
+
+For researchers, its closing idea is the bridge: evaluation is about
+externalizing tacit domain taste into code, prompts and harnesses, and error
+analysis is close to qualitative coding done on model traces. *Summary based on
+a timestamped summary of the video supplied by Yann, plus the video
+description.*
 
 ---
 
