@@ -427,7 +427,9 @@ ul, ol {{ padding-left:1.25rem; }}
 li {{ margin:.25rem 0; }}
 code {{ font-size:.9em; background:var(--card); border:1px solid var(--line); border-radius:4px; padding:0 .25rem; }}
 .subscribe {{ color:var(--muted); font-size:.95rem; border:1px solid var(--line); background:var(--card); border-radius:8px; padding:.6rem .9rem; }}
-.table {{ overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--card); }}
+.table {{ overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--card);
+  width:min(calc(46rem * 1.3), calc(100vw - 32px)); position:relative; left:50%; transform:translateX(-50%); }}
+td:last-child {{ white-space:nowrap; }}
 table {{ border-collapse:collapse; width:100%; min-width:40rem; font-size:.9rem; }}
 th, td {{ text-align:left; vertical-align:top; padding:.5rem .6rem; border-bottom:1px solid var(--line); }}
 tr:last-child td {{ border-bottom:0; }}
