@@ -25,7 +25,7 @@ SAMPLE = """# Resources
 
 - **Link:** <https://example.test/first>
 - **Author:** Ada Example
-- **Company at publication:** Acme
+- **Affiliation(s):** Acme
 - **Find them:** [Blog](https://ada.example) ·
   [LinkedIn](https://www.linkedin.com/in/ada/)
 - **Format:** Article (blog)

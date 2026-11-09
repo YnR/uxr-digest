@@ -8,7 +8,7 @@ resources are edited. This script reads it and writes:
   index.html       the page itself, rendered for GitHub Pages
   feed.xml         RSS 2.0, one item per resource, newest publication first
   feed.json        JSON Feed 1.1, same items, plus a `_evals` object with the
-                   structured fields (authors, company, format, dates, profile
+                   structured fields (authors, affiliations as `company`, format, dates, profile
                    links, the entry it is grouped under)
   resources.json   every resource in page order, for scripts
 
@@ -47,7 +47,8 @@ SECTION_LEAD = re.compile(r"^\*\*([^*]+?)\.\*\*\s*(.*)$", re.S)
 ISO_DATE = re.compile(r"^(\d{4}-\d{2}-\d{2})\b")
 FIELD_KEYS = {
     "link": "url", "author": "authors", "authors": "authors", "speaker": "authors",
-    "speakers": "authors", "company at publication": "company",
+    "speakers": "authors", "affiliation(s)": "company", "affiliations": "company",
+    "affiliation": "company", "company at publication": "company",
     "find them": "find_them", "format": "format", "published": "published",
 }
 
@@ -287,7 +288,7 @@ def _published_datetime(day: str) -> datetime:
 
 def _item_html(e: dict, by_id: dict) -> str:
     parts = []
-    facts = [("By", e["authors"]), ("Company at publication", e["company"]),
+    facts = [("By", e["authors"]), ("Affiliation(s)", e["company"]),
              ("Format", e["format"]), ("Published", e["published"])]
     if e["related_to"] and e["related_to"] in by_id:
         facts.append(("Grouped under", by_id[e["related_to"]]["title"]))
