@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+from urllib.parse import urlparse
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from html import escape as html_escape
@@ -146,6 +147,23 @@ def _blocks(lines: list[str]) -> list[tuple[str, list[str]]]:
     return blocks
 
 
+def _meta_html(items: list[str]) -> str:
+    """An entry's `- **Field:** value` list as a metadata card: the link becomes
+    a button naming its site, the rest a label/value grid."""
+    link, rows = "", []
+    for item in items:
+        m = FIELD_LINE.match("- " + item)
+        label, value = m.group(1), m.group(2).strip()
+        url = re.search(r"<(https?://[^>]+)>", value)
+        if label.lower() == "link" and url:
+            host = urlparse(url.group(1)).netloc.removeprefix("www.")
+            link = (f'<a class="open" href="{html_escape(url.group(1))}">'
+                    f'Open on {html_escape(host)} <span aria-hidden="true">↗</span></a>')
+            continue
+        rows.append(f"<dt>{html_escape(label)}</dt><dd>{inline_html(value)}</dd>")
+    return f'<div class="meta"><dl>{"".join(rows)}</dl>{link}</div>'
+
+
 SUB_ID = re.compile(r"^\d+[a-z]$")
 
 
@@ -188,6 +206,8 @@ def markdown_html(text: str) -> str:
                 + "</tr>" for r in body)
             out.append(f'<div class="table"><table><thead><tr>{head}</tr></thead>'
                        f"<tbody>{trs}</tbody></table></div>")
+        elif kind == "ul" and lines and all(FIELD_LINE.match("- " + item) for item in lines):
+            out.append(_meta_html(lines))
         elif kind in ("ul", "ol"):
             items = "".join(f"<li>{inline_html(item)}</li>" for item in lines)
             out.append(f"<{kind}>{items}</{kind}>")
@@ -419,6 +439,14 @@ tr.sub a {{ color:var(--accent); }}
 section.related {{ margin:2rem 0 0 .25rem; padding:.25rem 1.1rem 1rem; border-left:3px solid var(--accent); background:var(--sub); border-radius:0 8px 8px 0; }}
 section.related h3 {{ margin-top:1rem; padding-left:0; border-left:0; }}
 section.related + section.related {{ margin-top:1.25rem; }}
+.meta {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem; margin:1rem 0 1.25rem; }}
+.meta dl {{ display:grid; grid-template-columns:max-content 1fr; gap:.45rem 1rem; margin:0; }}
+.meta dt {{ font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:.2rem; }}
+.meta dd {{ margin:0; }}
+.meta .open {{ display:inline-block; margin-top:.9rem; padding:.4rem .8rem; border:1px solid var(--accent); border-radius:999px; text-decoration:none; font-size:.9rem; font-weight:600; }}
+.meta .open:hover {{ background:var(--accent); color:var(--card); }}
+section.related .meta {{ background:var(--bg); }}
+@media (max-width: 520px) {{ .meta dl {{ grid-template-columns:1fr; gap:.1rem; }} .meta dd {{ margin-bottom:.5rem; }} }}
 h3 .label {{ display:block; font-size:.75rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:.2rem; }}
 </style>
 </head>

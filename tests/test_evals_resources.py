@@ -113,6 +113,9 @@ class InlineTest(unittest.TestCase):
         self.assertLess(html.index("It goes further"), html.index("</section>"))
         self.assertLess(html.index("</section>"), html.index("<hr>"))
         self.assertIn('<tr class="sub"><td>1a</td><td>b</td>', html)
+        self.assertEqual(html.count('<div class="meta">'), 2)
+        self.assertIn('<a class="open" href="https://example.test/first">Open on example.test', html)
+        self.assertIn("<dt>Affiliation(s)</dt><dd>Acme</dd>", html)
 
     def test_plain_text_and_anchor(self):
         self.assertEqual(plain_text("See [the post](https://x.test) *now*"), "See the post now")
