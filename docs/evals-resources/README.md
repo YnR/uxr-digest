@@ -29,6 +29,7 @@ the format, and what the piece adds to the conversation.
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
 | 4 | [Putting the user back into AI Evaluation](#4-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
 | 4a | ↳ [The Model Got Better. Did the Experience?](#4a-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft | Article | 2026-10-22 |
+| 4b | ↳ [UXR AI Evals (Research Week 2026)](#4b-related-take-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026 (exact date not confirmed) |
 | 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Not confirmed | DoorDash (publication) | Article | Not confirmed |
 
 ---
@@ -216,8 +217,34 @@ feedback is weak (self-selection bias) and spells out the improvement loop most
 explicitly: user findings become loss patterns, loss patterns feed golden
 datasets, and those datasets calibrate expert annotators and LLM judges against
 user judgment. It links a related talk on user evals Kwong gave at Learners with
-[Giuliano Morse](https://www.linkedin.com/in/giulianomorse/) (Meta):
-<https://www.youtube.com/watch?v=O6D80IgjaxI>.
+[Giuliano Morse](https://www.linkedin.com/in/giulianomorse/) (Meta); see 4b.
+
+### 4b. Related take: UXR AI Evals (Research Week 2026)
+
+- **Link:** <https://www.youtube.com/watch?v=O6D80IgjaxI>
+- **Speakers:** Giuliano Morse and Chuck Kwong
+- **Company at publication:** Morse, Meta; Kwong, Microsoft. Both affiliations
+  come from Kwong's post (4a); the video's own description could not be read.
+- **Find them:** Giuliano Morse:
+  [LinkedIn](https://www.linkedin.com/in/giulianomorse/). Chuck Kwong:
+  [Substack](https://chuckkwong.substack.com).
+- **Format:** Presentation (talk at Learners Research Week 2026, a UX research
+  conference in San Francisco; published on the
+  [Learners YouTube channel](https://www.youtube.com/@JoinLearners))
+- **Published:** 2026. Kwong's October post says the talk was given "earlier
+  this year", and it appears in a Research Week 2026 recap dated 2026-10-11. The
+  exact talk and upload dates are not confirmed.
+
+**Why it sits under the Microsoft Design piece.** Kwong describes it as a talk
+on user evals, the same practice covered in 4 and 4a, so it is grouped here. It
+adds a second company's view: Morse is at Meta, so the talk is not only
+Microsoft's program. *If the talk turns out to predate the Microsoft Design
+article (2026-09-17), it should become the canonical entry for this group.*
+
+**What it adds.** *Not summarized, because the video page could not be read.*
+Only its title, channel and speakers were confirmed, from YouTube's embed data.
+The talk's content, and how much of it overlaps with 4 and 4a, still need to be
+checked.
 
 ---
 
