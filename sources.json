@@ -1,6 +1,6 @@
 {
   "note": "The canonical list of sources for this project. Every client reads this file rather than keeping its own copy: the scheduled digest task checks each entry with \"monitored\": true, and the reader app in reader/ uses it to group and filter articles by source. Add, remove or rename a source by editing this file. See reader/README.md for the fields.",
-  "updated": "2026-10-21",
+  "updated": "2026-11-09",
   "sources": [
     {
       "id": "nngroup",
@@ -96,6 +96,14 @@
         "Saeideh Bakhshi",
         "Saeideh Bakhshi, Research toolbox"
       ]
+    },
+    {
+      "id": "chuck-kwong",
+      "name": "Chuck Kwong",
+      "url": "https://chuckkwong.substack.com/",
+      "monitored": true,
+      "domains": ["chuckkwong.substack.com"],
+      "aliases": []
     },
     {
       "id": "user-research-strategist",
