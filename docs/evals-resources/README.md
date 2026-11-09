@@ -77,10 +77,7 @@ the person's real context, which raters following a rubric do not see.
 
 - **Link:** <https://saeidehbakhshi.substack.com/p/what-ux-and-survey-researchers-bring>
 - **Author:** Saeideh Bakhshi
-- **Company at publication:** OpenAI. Her About page and
-  [personal site](https://saeideh.com) say she is a quantitative UX research
-  leader currently at OpenAI (previously Meta, Google, Block and Yahoo), and that
-  her views are her own. The post itself does not restate her employer.
+- **Company at publication:** OpenAI
 - **Find them:** [Research toolbox (Substack)](https://saeidehbakhshi.substack.com) ·
   [LinkedIn](https://www.linkedin.com/in/saeideh-bakhshi-68a3676/) ·
   [saeideh.com](https://saeideh.com) · book project:
