@@ -29,7 +29,7 @@ the resources and their summaries can be read programmatically.
 | 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar, Hamel Husain | OpenAI (Husain) | Presentation (talk with live demo) | 2026-07-03 |
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
 | 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft AI | Presentation (conference talk) | 2026-08-20 |
-| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft AI | Article (interview) | 2026-09-17 |
+| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang | Microsoft AI | Article (interview) | 2026-09-17 |
 | 4b | ↳ [The Model Got Better. Did the Experience?](#4b-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft AI | Article | 2026-10-22 |
 | 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Nam Pham, Andrea Cavicchi | DoorDash | Article | 2026-09-18 |
 
@@ -252,10 +252,8 @@ how user evals plug into ML pipelines:
 ### 4a. Related take: Putting the user back into AI Evaluation
 
 - **Link:** <https://microsoft.design/articles/putting-the-user-back-into-ai-evaluation/>
-- **Authors:** No byline. The piece is built from conversations with three
-  researchers at Microsoft AI: **Chris Monnier** (Principal UX Researcher),
-  **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
-  Copilot UX Research team).
+- **Speakers:** Chris Monnier (Principal UX Researcher), Chuck Kwong (Principal
+  UX Researcher) and Wendy Wang (leads the Copilot UX Research team)
 - **Affiliation(s):** Microsoft AI
 - **Find them:** The article links no personal profiles. Chuck Kwong:
   [Substack](https://chuckkwong.substack.com) ·
