@@ -1,12 +1,14 @@
 name: Publish feeds
 
-# Rebuilds the RSS and JSON feeds whenever a digest lands on main and serves
-# them from GitHub Pages. Pages must be set to "GitHub Actions" as its source
-# (Settings → Pages) for the deploy step to succeed.
+# Rebuilds the RSS and JSON feeds whenever a digest lands on main, and the AI
+# evals resources page (HTML plus its own RSS and JSON feeds, under /evals/)
+# whenever that page changes, and serves both from GitHub Pages. Pages must be
+# set to "GitHub Actions" as its source (Settings → Pages) for the deploy step
+# to succeed.
 on:
   push:
     branches: [main]
-    paths: ["posts/**", "reader/**", ".github/workflows/feeds.yml"]
+    paths: ["posts/**", "reader/**", "docs/evals-resources/**", ".github/workflows/feeds.yml"]
   workflow_dispatch:
 
 permissions:
@@ -30,6 +32,8 @@ jobs:
         run: python -m unittest discover -s tests
       - name: Build feeds
         run: python reader/feeds.py --out _site --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+      - name: Build the evals resources page and feeds
+        run: python reader/evals_resources.py --out _site/evals --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/evals/"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
