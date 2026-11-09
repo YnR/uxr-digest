@@ -276,12 +276,6 @@ how user evals plug into ML pipelines:
 - **Format:** Article (interview, Microsoft Design; second in a series)
 - **Published:** 2026-09-17
 
-**Why it sits under the Research Week talk.** It covers the same user-evals
-practice (real users with their own tasks, user judgment as the ground truth
-for automated judges), published a month later, with Kwong as one of its three
-voices. The other two researchers, Monnier and Wang, make it a team view rather
-than a speaker's.
-
 **How it differs.** An inside look at a working, product-scale eval program
 (response quality for Copilot) run with UX research at the table. The core claim:
 machine evals can check whether an answer meets the criteria you set, but only
@@ -308,11 +302,6 @@ and notes that frameworks go stale fast.
   [LinkedIn](https://www.linkedin.com/in/charleskwong/)
 - **Format:** Article (Substack)
 - **Published:** 2026-10-22
-
-**Why it sits under the Research Week talk.** It describes the same program and
-many of the same ideas (golden datasets, loss patterns, users judging their own
-interactions). Kwong spoke at the talk and was interviewed for 4a; this is his
-own first-person written account.
 
 **How it differs.** It names the practice, **user evals** (users judging their
 own interactions with AI), and argues that the label is clearer than "UX evals"
