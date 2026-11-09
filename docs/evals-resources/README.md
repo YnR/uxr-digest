@@ -30,7 +30,7 @@ the format, and what the piece adds to the conversation.
 | 4 | [Putting the user back into AI Evaluation](#4-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft (Microsoft AI) | Article (interview) | 2026-09-17 |
 | 4a | ↳ [The Model Got Better. Did the Experience?](#4a-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft | Article | 2026-10-22 |
 | 4b | ↳ [UXR AI Evals (Research Week 2026)](#4b-related-take-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft | Presentation (conference talk) | 2026 (exact date not confirmed) |
-| 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Not confirmed | DoorDash (publication) | Article | Not confirmed |
+| 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Nam Pham, Andrea Cavicchi | DoorDash | Article | 2026-09-18 |
 
 ---
 
@@ -252,19 +252,43 @@ checked.
 ## 5. Building AI Evals: Who Gets to Decide What's Good?
 
 - **Link:** <https://medium.com/design-doordash/building-ai-evals-who-gets-to-decide-whats-good-39671385f50d>
-- **Author:** Not confirmed. *The page could not be fetched, so the author,
-  their role and the publication date are not recorded here rather than
-  guessed.*
-- **Company at publication:** Published on DoorDash's design publication on
-  Medium (from the URL); the author's own affiliation is not confirmed.
-- **Find them:** Not confirmed.
-- **Format:** Article (Medium)
-- **Published:** Not confirmed
+- **Authors:** Nam Pham (senior researcher) and Andrea Cavicchi (staff
+  researcher), published under the DoorDash Design Team byline
+- **Company at publication:** DoorDash (UX Research)
+- **Find them:** Nam Pham: [LinkedIn](https://www.linkedin.com/in/namph/).
+  Andrea Cavicchi: [LinkedIn](https://www.linkedin.com/in/andreakc/).
+  Publication: [Design @ DoorDash](https://medium.com/design-doordash)
+- **Format:** Article (Medium, 7 min; first in a series)
+- **Published:** 2026-09-18
 
-**What it adds.** *Not summarized, because the article could not be read.* Its
-title raises the question of who defines "good" in an eval, which connects it to
-the Figma talk (3) and the Microsoft Design piece (4). Once it can be read, check
-whether it overlaps enough with either to be grouped under it.
+**What it adds.** A taxonomy for the question "whose judgment should the answer
+key reflect?", and a worked case of building an LLM judge from user research.
+It splits "good" into the objective (checkable with a rule or AI judge) and the
+subjective, which lives in people and has to be gathered from them before a
+machine can test against it. It then names three kinds of eval question, each
+calling for different people to recruit: **Fit** (is this right for this
+individual? only the user can say), **Authority** (is it actually high quality?
+set by experts or the community) and **Boundaries** (should the AI do this at
+all? set by the people affected).
+
+The case study, personalized homepage recommendations, shows survey craft
+shaping the judge. The team's rejection reasons had never been tested with
+consumers; open-ended answers showed people picking the nearest box ("cuisine
+mismatch") for other reasons, and surfaced missing ones ("I could make this at
+home", "not right now", "doesn't travel well"). Switching from
+check-all-that-apply to one primary reason plus confidence gave cleaner data
+and a grounded answer key, and the judges were then tuned in a
+prompt-benchmark-analyze loop, catching dietary restrictions 2.5x better than
+an untrained judge on held-out data. It closes with a caution: human taste is
+inconsistent, so a judge can only be as consistent as the human baseline, and
+over-optimizing agreement leads to "number gaming".
+
+**How it relates to others.** It shares the Microsoft Design piece's (4) core
+idea of calibrating automated judges against user judgment, published a day
+later by a different team. It stays a separate entry because its main
+contribution, the Fit / Authority / Boundaries framework for choosing whose
+judgment counts, is not in the other pieces. Its survey-design lessons are a
+concrete example of the skills Lick (1) and Bakhshi (1a) say transfer to evals.
 
 ---
 
