@@ -31,6 +31,14 @@ Add the new entry in date order (oldest first) and add a row to the
 Add an **In context** section when later work has moved the conversation on
 (for example, Lick's 2023 article predates LLM-as-judge evals and user evals).
 
+## Suggestions from readers
+
+Readers suggest resources by email using the template at the bottom of the
+page. If the person asked to be credited, add a
+`- **Suggested by:** [Name](LinkedIn URL)` line at the end of the entry's field
+list. Use what they wrote about why the resource is interesting as input to
+"What it adds", checked against the resource itself.
+
 ## Overlapping resources
 
 If two contributions overlap a lot, the **oldest** is the canonical entry and

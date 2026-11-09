@@ -346,5 +346,17 @@ concrete example of the skills Lick (1) and Bakhshi (1a) say transfer to evals.
 
 ---
 
-*Know a resource that belongs here? Email
-[yann.riche+evals@gmail.com](mailto:yann.riche+evals@gmail.com) to suggest it.*
+## Suggest a resource
+
+Know a resource that belongs here? [Email it to yann.riche+evals@gmail.com](mailto:yann.riche+evals@gmail.com?subject=Evals%20resource%20suggestion%3A%20%5Btitle%5D&body=Link%20to%20the%20resource%3A%0ATitle%3A%0AAuthor%28s%29%20or%20speaker%28s%29%3A%0APublished%20%28date%29%3A%0A%0AWhat%20is%20particularly%20interesting%20about%20it%2C%20and%20what%20does%20it%20add%20to%20the%20conversation%20about%20AI%20evals%3F%0A%0A%0AWould%20you%20like%20to%20be%20credited%20for%20the%20suggestion%3F%20%28optional%29%0AYour%20name%3A%0AYour%20LinkedIn%3A%0A)
+(the link opens a pre-filled email), or copy this template into your own
+message, with the subject "Evals resource suggestion: [title]":
+
+- **Link to the resource:**
+- **Title:**
+- **Author(s) or speaker(s):**
+- **Published (date):**
+- **What is particularly interesting about it,** and what does it add to the
+  conversation about AI evals?
+- **Credit (optional):** if you would like to be credited for the suggestion,
+  your name and a link to your LinkedIn profile.
