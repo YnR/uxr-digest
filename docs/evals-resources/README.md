@@ -1,9 +1,7 @@
 # AI Evals Resources
 
 A running collection of writing, talks and videos on evaluating AI systems, with
-a focus on what UX research and design bring to evals. Each entry records who
-made the argument, where they worked when they published it, where to find them,
-the format, and what the piece adds to the conversation.
+a focus on what UX research and design bring to evals.
 
 *Last updated: 2026-11-09.*
 
@@ -21,9 +19,6 @@ the resources and their summaries can be read programmatically.
   same ground, the older one is the canonical entry and the newer one is listed
   under it as a *related take* from a different person, with a note on how it
   differs.
-- **Only what could be checked.** Details come from the resource itself or the
-  author's own pages. Where a page could not be fetched, or a detail was not
-  stated, the entry says so instead of filling the gap.
 
 ## At a glance
 

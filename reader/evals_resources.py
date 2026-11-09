@@ -145,21 +145,46 @@ def _blocks(lines: list[str]) -> list[tuple[str, list[str]]]:
     return blocks
 
 
+SUB_ID = re.compile(r"^\d+[a-z]$")
+
+
 def markdown_html(text: str) -> str:
+    """Render the page. A related take (`### Na.`) and everything under it, up to
+    the next heading or rule, is wrapped in `<section class="related">` so it
+    reads as nested under its canonical entry."""
     out = []
+    in_related = False
+
+    def close_related() -> None:
+        nonlocal in_related
+        if in_related:
+            out.append("</section>")
+            in_related = False
+
     for kind, lines in _blocks(text.splitlines()):
         if kind == "heading":
             level = len(lines[0]) - len(lines[0].lstrip("#"))
             title = lines[0][level:].strip()
-            out.append(f'<h{level} id="{heading_anchor(title)}">{inline_html(title)}</h{level}>')
+            close_related()
+            heading = f'<h{level} id="{heading_anchor(title)}">{inline_html(title)}</h{level}>'
+            if level == 3 and ENTRY_HEADING.match(lines[0]):
+                m = re.match(r"^(\d+[a-z]?)\. (?:Related take:\s*)?(.+)$", title)
+                heading = (f'<h3 id="{heading_anchor(title)}"><span class="label">Related take '
+                           f'{html_escape(m.group(1))}</span>{inline_html(m.group(2))}</h3>')
+                out.append('<section class="related">')
+                in_related = True
+            out.append(heading)
         elif kind == "rule":
+            close_related()
             out.append("<hr>")
         elif kind == "table":
             rows = [[c.strip() for c in r.strip().strip("|").split("|")] for r in lines]
             body = [r for r in rows[1:] if not all(re.fullmatch(r":?-+:?", c) for c in r)]
             head = "".join(f"<th>{inline_html(c)}</th>" for c in rows[0])
-            trs = "".join("<tr>" + "".join(f"<td>{inline_html(c)}</td>" for c in r) + "</tr>"
-                          for r in body)
+            trs = "".join(
+                ('<tr class="sub">' if r and SUB_ID.match(r[0]) else "<tr>")
+                + "".join(f"<td>{inline_html(c.replace('↳', '').strip())}</td>" for c in r)
+                + "</tr>" for r in body)
             out.append(f'<div class="table"><table><thead><tr>{head}</tr></thead>'
                        f"<tbody>{trs}</tbody></table></div>")
         elif kind in ("ul", "ol"):
@@ -167,6 +192,7 @@ def markdown_html(text: str) -> str:
             out.append(f"<{kind}>{items}</{kind}>")
         else:
             out.append(f"<p>{inline_html(lines[0])}</p>")
+    close_related()
     return "\n".join(out)
 
 
@@ -363,11 +389,11 @@ def to_html(markdown: str, base_url: str) -> str:
 <link rel="alternate" type="application/rss+xml" title="{FEED_TITLE} (RSS)" href="{base_url}feed.xml">
 <link rel="alternate" type="application/feed+json" title="{FEED_TITLE} (JSON Feed)" href="{base_url}feed.json">
 <style>
-:root {{ --bg:#fbfaf7; --fg:#1f2328; --muted:#5b6370; --line:#e3e0d8; --accent:#2f5bd3; --card:#ffffff; }}
+:root {{ --bg:#fbfaf7; --fg:#1f2328; --muted:#5b6370; --line:#e3e0d8; --accent:#2f5bd3; --card:#ffffff; --sub:#f1f4fb; }}
 @media (prefers-color-scheme: dark) {{
-  :root:not([data-theme="light"]) {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; }}
+  :root:not([data-theme="light"]) {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; --sub:#1d2433; }}
 }}
-:root[data-theme="dark"] {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; }}
+:root[data-theme="dark"] {{ --bg:#15171a; --fg:#e6e8eb; --muted:#9aa3ae; --line:#2c3036; --accent:#8fb0ff; --card:#1c1f23; --sub:#1d2433; }}
 * {{ box-sizing:border-box; }}
 body {{ margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }}
 main {{ max-width:46rem; margin:0 auto; padding:2rem 16px 4rem; }}
@@ -381,9 +407,18 @@ li {{ margin:.25rem 0; }}
 code {{ font-size:.9em; background:var(--card); border:1px solid var(--line); border-radius:4px; padding:0 .25rem; }}
 .subscribe {{ color:var(--muted); font-size:.95rem; border:1px solid var(--line); background:var(--card); border-radius:8px; padding:.6rem .9rem; }}
 .table {{ overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--card); }}
-table {{ border-collapse:collapse; width:100%; font-size:.9rem; }}
+table {{ border-collapse:collapse; width:100%; min-width:40rem; font-size:.9rem; }}
 th, td {{ text-align:left; vertical-align:top; padding:.5rem .6rem; border-bottom:1px solid var(--line); }}
 tr:last-child td {{ border-bottom:0; }}
+tr.sub td {{ background:var(--sub); font-size:.85rem; color:var(--muted); }}
+tr.sub td:first-child {{ box-shadow:inset 3px 0 0 var(--accent); padding-left:1rem; }}
+tr.sub td:nth-child(2) {{ padding-left:1.5rem; position:relative; }}
+tr.sub td:nth-child(2)::before {{ content:"↳"; position:absolute; left:.5rem; color:var(--accent); }}
+tr.sub a {{ color:var(--accent); }}
+section.related {{ margin:2rem 0 0 .25rem; padding:.25rem 1.1rem 1rem; border-left:3px solid var(--accent); background:var(--sub); border-radius:0 8px 8px 0; }}
+section.related h3 {{ margin-top:1rem; padding-left:0; border-left:0; }}
+section.related + section.related {{ margin-top:1.25rem; }}
+h3 .label {{ display:block; font-size:.75rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:.2rem; }}
 </style>
 </head>
 <body>
