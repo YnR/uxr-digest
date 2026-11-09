@@ -29,7 +29,7 @@ the resources and their summaries can be read programmatically.
 | 2 | [How to Automate AI Evals (Correctly)](#2-how-to-automate-ai-evals-correctly) | Shreya Shankar, Hamel Husain | OpenAI (Husain) | Presentation (talk with live demo) | 2026-07-03 |
 | 3 | [Own the loop: how designers and researchers win with AI evals](#3-own-the-loop-how-designers-and-researchers-win-with-ai-evals) | Setor Zilevu | Figma | Presentation (Config 2026 talk) | 2026-07-06 |
 | 4 | [UXR AI Evals (Research Week 2026)](#4-uxr-ai-evals-research-week-2026) | Giuliano Morse, Chuck Kwong | Meta, Microsoft AI | Presentation (conference talk) | 2026-08-20 |
-| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang (interviewees) | Microsoft AI | Article (interview) | 2026-09-17 |
+| 4a | ↳ [Putting the user back into AI Evaluation](#4a-related-take-putting-the-user-back-into-ai-evaluation) | Chris Monnier, Chuck Kwong, Wendy Wang | Microsoft AI | Article (interview) | 2026-09-17 |
 | 4b | ↳ [The Model Got Better. Did the Experience?](#4b-related-take-the-model-got-better-did-the-experience) | Chuck Kwong | Microsoft AI | Article | 2026-10-22 |
 | 5 | [Building AI Evals: Who Gets to Decide What's Good?](#5-building-ai-evals-who-gets-to-decide-whats-good) | Nam Pham, Andrea Cavicchi | DoorDash | Article | 2026-09-18 |
 
@@ -148,9 +148,7 @@ apply that judgment faster, not replace it.
 
 For researchers, its closing idea is the bridge: evaluation is about
 externalizing tacit domain taste into code, prompts and harnesses, and error
-analysis is close to qualitative coding done on model traces. *Summary based on
-a timestamped summary of the video supplied by Yann, plus the video
-description.*
+analysis is close to qualitative coding done on model traces.
 
 ---
 
@@ -197,9 +195,6 @@ expertise.
 - **Four levers designers and researchers can own:** system prompts, eval
   design ("whoever defines the rubric defines the target"), datasets, and the
   agent's capabilities and tooling.
-
-*Summary based on a timestamped summary of the talk supplied by Yann, plus the
-video description.*
 
 ---
 
@@ -254,15 +249,11 @@ how user evals plug into ML pipelines:
   (tone, length, structure), pair discovery interviews with post-eval attribute
   ratings and run a driver analysis against the preference signal.
 
-*Summary based on a timestamped summary of the talk supplied by Yann.*
-
 ### 4a. Related take: Putting the user back into AI Evaluation
 
 - **Link:** <https://microsoft.design/articles/putting-the-user-back-into-ai-evaluation/>
-- **Authors:** No byline. The piece is built from conversations with three
-  researchers at Microsoft AI: **Chris Monnier** (Principal UX Researcher),
-  **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
-  Copilot UX Research team).
+- **Speakers:** Chris Monnier (Principal UX Researcher), Chuck Kwong (Principal
+  UX Researcher) and Wendy Wang (leads the Copilot UX Research team)
 - **Affiliation(s):** Microsoft AI
 - **Find them:** The article links no personal profiles. Chuck Kwong:
   [Substack](https://chuckkwong.substack.com) ·
@@ -355,16 +346,5 @@ concrete example of the skills Lick (1) and Bakhshi (1a) say transfer to evals.
 
 ---
 
-## Adding a resource
-
-Add the new entry in date order and add a row to the table. Record the author,
-their affiliation(s) at publication, links to their blog and/or LinkedIn, the format
-(article, podcast or presentation), the publication date and what the piece
-adds. If it largely overlaps an existing entry, list it under the older one as a
-related take and say how it differs. If a page cannot be read, say so in the
-entry.
-
-Keep each entry to the same shape (a `## N.` or `### Na. Related take:`
-heading, the `- **Field:**` list, then sections that open with a bold lead-in
-such as `**What it adds.**`), because `reader/evals_resources.py` builds the
-published page and feeds from it.
+*Know a resource that belongs here? Email
+[yann.riche+evals@gmail.com](mailto:yann.riche+evals@gmail.com) to suggest it.*
