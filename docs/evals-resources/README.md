@@ -39,11 +39,8 @@ the resources and their summaries can be read programmatically.
 
 - **Link:** <https://medium.com/@davidjameslick/how-ux-research-can-meet-the-moment-3e145acb5471>
 - **Author:** David J. Lick, PhD
-- **Company at publication:** Google. The byline says Senior UX Researcher; the
-  body says he was a research manager, and his
-  [UXPA Magazine bio](https://uxpamagazine.org/author/david-lick/) describes him
-  managing a Google UX Research team focused on AI and human productivity
-  (previously Facebook and Vine).
+- **Company at publication:** Google. UX Research Manager at Google (Google
+  Docs) at the time of publication.
 - **Find them:** [Medium](https://medium.com/@davidjameslick) ·
   [LinkedIn](https://www.linkedin.com/in/david-lick-10b28a105/)
 - **Format:** Article (Medium, 6 min)
