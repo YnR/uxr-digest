@@ -22,3 +22,9 @@ knows the name without having to guess at it.
 ## Commit target
 
 All digest posts go directly to `main`. Do not commit to a feature branch.
+
+## AI evals resources page
+
+`docs/evals-resources/README.md` is published to GitHub Pages with feeds.
+Before adding or editing an entry there, read
+`docs/evals-resources/INSTRUCTIONS.md` and follow it.

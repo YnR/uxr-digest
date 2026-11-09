@@ -346,16 +346,5 @@ concrete example of the skills Lick (1) and Bakhshi (1a) say transfer to evals.
 
 ---
 
-## Adding a resource
-
-Add the new entry in date order and add a row to the table. Record the author,
-their affiliation(s) at publication, links to their blog and/or LinkedIn, the format
-(article, podcast or presentation), the publication date and what the piece
-adds. If it largely overlaps an existing entry, list it under the older one as a
-related take and say how it differs. If a page cannot be read, say so in the
-entry.
-
-Keep each entry to the same shape (a `## N.` or `### Na. Related take:`
-heading, the `- **Field:**` list, then sections that open with a bold lead-in
-such as `**What it adds.**`), because `reader/evals_resources.py` builds the
-published page and feeds from it.
+*Know a resource that belongs here? Email
+[yann.riche+evals@gmail.com](mailto:yann.riche+evals@gmail.com) to suggest it.*
