@@ -43,8 +43,8 @@ the format, and what the piece adds to the conversation.
   [UXPA Magazine bio](https://uxpamagazine.org/author/david-lick/) describes him
   managing a Google UX Research team focused on AI and human productivity
   (previously Facebook and Vine).
-- **Find them:** [Medium](https://medium.com/@davidjameslick). No LinkedIn or
-  personal site is linked from the article or his bio.
+- **Find them:** [Medium](https://medium.com/@davidjameslick) ·
+  [LinkedIn](https://www.linkedin.com/in/david-lick-10b28a105/)
 - **Format:** Article (Medium, 6 min)
 - **Published:** 2023-10-07
 
@@ -141,8 +141,7 @@ chapter list; no transcript was available.*
 - **Speaker:** Setor Zilevu
 - **Company at publication:** Figma (as stated in the video title). His job
   title is not given.
-- **Find them:** No blog or LinkedIn is linked in the video description, and
-  none could be confirmed.
+- **Find them:** [LinkedIn](https://www.linkedin.com/in/setor-zilevu/)
 - **Format:** Presentation (Config 2026 talk, published on Figma's channel)
 - **Published:** 2026-07-06
 
@@ -167,9 +166,10 @@ transcribed.*
   **Chuck Kwong** (Principal UX Researcher) and **Wendy Wang** (leads the
   Copilot UX Research team).
 - **Company at publication:** Microsoft (Microsoft AI, Copilot)
-- **Find them:** The article links no personal profiles. Chuck Kwong writes at
-  [chuckkwong.substack.com](https://chuckkwong.substack.com). LinkedIn profiles
-  for the three could not be confirmed.
+- **Find them:** The article links no personal profiles. Chuck Kwong:
+  [Substack](https://chuckkwong.substack.com) ·
+  [LinkedIn](https://www.linkedin.com/in/charleskwong/). LinkedIn profiles for
+  Chris Monnier and Wendy Wang have not been confirmed.
 - **Format:** Article (interview, Microsoft Design; second in a series)
 - **Published:** 2026-09-17
 
@@ -195,8 +195,8 @@ and notes that frameworks go stale fast.
 - **Company at publication:** Microsoft. The post draws on his team's work on
   "User evals" at Microsoft; it gives no job title, but the Microsoft Design
   piece above names him a Principal UX Researcher at Microsoft AI.
-- **Find them:** [Substack](https://chuckkwong.substack.com). No LinkedIn is
-  linked from the post or his About page.
+- **Find them:** [Substack](https://chuckkwong.substack.com) ·
+  [LinkedIn](https://www.linkedin.com/in/charleskwong/)
 - **Format:** Article (Substack)
 - **Published:** 2026-10-22
 
@@ -227,7 +227,8 @@ user judgment. It links a related talk on user evals Kwong gave at Learners with
   come from Kwong's post (4a); the video's own description could not be read.
 - **Find them:** Giuliano Morse:
   [LinkedIn](https://www.linkedin.com/in/giulianomorse/). Chuck Kwong:
-  [Substack](https://chuckkwong.substack.com).
+  [Substack](https://chuckkwong.substack.com) ·
+  [LinkedIn](https://www.linkedin.com/in/charleskwong/)
 - **Format:** Presentation (talk at Learners Research Week 2026, a UX research
   conference in San Francisco; published on the
   [Learners YouTube channel](https://www.youtube.com/@JoinLearners))
