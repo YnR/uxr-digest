@@ -69,6 +69,13 @@ following up, including Howcroft et al. (2020),
 and Gatt & Krahmer (2018),
 [*Survey of the State of the Art in Natural Language Generation*](https://www.jair.org/index.php/jair/article/view/11173).
 
+**In context.** The piece predates two later shifts in the conversation:
+automated judging (machine and LLM-as-judge evals) and **user evals**, where real
+users judge output on their own tasks (see 4). Lick treats human evals by
+trained raters as the gold standard; later work argues that user evals are the
+more canonical judgment, because they are more ecologically valid: they capture
+the person's real context, which raters following a rubric do not see.
+
 ### 1a. Related take: From UX Measurement to AI Evaluation
 
 - **Link:** <https://saeidehbakhshi.substack.com/p/what-ux-and-survey-researchers-bring>
