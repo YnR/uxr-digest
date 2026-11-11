@@ -157,6 +157,14 @@
       "monitored": false,
       "domains": ["philipburgess.net"],
       "aliases": []
+    },
+    {
+      "id": "lennys-newsletter",
+      "name": "Lenny's Newsletter",
+      "url": "https://www.lennysnewsletter.com/",
+      "monitored": false,
+      "domains": ["lennysnewsletter.com"],
+      "aliases": ["Lenny Rachitsky", "Lenny's Podcast"]
     }
   ]
 }
