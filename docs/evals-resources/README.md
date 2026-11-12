@@ -11,15 +11,6 @@ an [RSS feed](https://ynr.github.io/uxr-digest/evals/feed.xml), a
 [resources.json](https://ynr.github.io/uxr-digest/evals/resources.json) list, so
 the resources and their summaries can be read programmatically.
 
-## How this page is organized
-
-- **Chronological, oldest first**, so the conversation reads in the order it
-  developed.
-- **Overlapping pieces are grouped.** When two contributions cover much of the
-  same ground, the older one is the canonical entry and the newer one is listed
-  under it as a *related take* from a different person, with a note on how it
-  differs.
-
 ## At a glance
 
 | # | Resource | Author(s) | Affiliation(s) | Format | Published |
