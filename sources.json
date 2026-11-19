@@ -1,6 +1,6 @@
 {
   "note": "The canonical list of sources for this project. Every client reads this file rather than keeping its own copy: the scheduled digest task checks each entry with \"monitored\": true, and the reader app in reader/ uses it to group and filter articles by source. Add, remove or rename a source by editing this file. See reader/README.md for the fields.",
-  "updated": "2026-11-09",
+  "updated": "2026-11-19",
   "sources": [
     {
       "id": "nngroup",
@@ -104,6 +104,17 @@
       "monitored": true,
       "domains": ["chuckkwong.substack.com"],
       "aliases": []
+    },
+    {
+      "id": "general-purpose",
+      "name": "General Purpose",
+      "url": "https://genpurpose.substack.com/",
+      "monitored": true,
+      "domains": ["genpurpose.substack.com"],
+      "aliases": [
+        "Jess Holbrook",
+        "General Purpose (Jess Holbrook)"
+      ]
     },
     {
       "id": "user-research-strategist",
