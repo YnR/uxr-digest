@@ -165,6 +165,14 @@
       "monitored": false,
       "domains": ["lennysnewsletter.com"],
       "aliases": ["Lenny Rachitsky", "Lenny's Podcast"]
+    },
+    {
+      "id": "jakob-nielsen-ux-roundup",
+      "name": "UX Roundup (Jakob Nielsen)",
+      "url": "https://jakobnielsenphd.substack.com/",
+      "monitored": false,
+      "domains": ["jakobnielsenphd.substack.com", "uxtigers.com"],
+      "aliases": ["Jakob Nielsen", "UX Roundup", "UX Tigers"]
     }
   ]
 }
