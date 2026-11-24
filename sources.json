@@ -173,6 +173,14 @@
       "monitored": false,
       "domains": ["jakobnielsenphd.substack.com", "uxtigers.com"],
       "aliases": ["Jakob Nielsen", "UX Roundup", "UX Tigers"]
+    },
+    {
+      "id": "smashing-magazine",
+      "name": "Smashing Magazine",
+      "url": "https://www.smashingmagazine.com/",
+      "monitored": false,
+      "domains": ["smashingmagazine.com"],
+      "aliases": []
     }
   ]
 }
